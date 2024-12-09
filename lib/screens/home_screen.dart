@@ -245,3 +245,4 @@ class HomeContent extends StatelessWidget {
     );
   }
 }
+// Compare this snippet from lib/screens/admin_dashboard.dart:
