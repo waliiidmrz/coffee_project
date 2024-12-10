@@ -1,3 +1,4 @@
+import 'package:coffee_project/providers/provider.dart';
 import 'package:coffee_project/screens/forgot_password.dart';
 import 'package:coffee_project/screens/reset_password.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // Example provider setup
-        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: MaterialApp(
         title: 'Coffee Shop App',

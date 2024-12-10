@@ -1,3 +1,4 @@
+import 'package:coffee_project/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import '../utils/validators.dart'; // Import the validators file
 
@@ -235,7 +236,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 );
                               } else {
-                                Navigator.pushNamed(context, '/home');
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) => const MainScreen(),
+                                    ),
+                                    (route) => false);
                               }
                             },
                             style: ElevatedButton.styleFrom(
