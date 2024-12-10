@@ -9,6 +9,26 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final FocusNode confirmPasswordNode = FocusNode();
+  final FocusNode newPasswordNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    confirmPasswordNode.addListener(() {
+      setState(() {});
+    });
+    newPasswordNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    confirmPasswordNode.dispose();
+    newPasswordNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +36,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/start1.png'), // Background image
+            image: AssetImage('assets/images/bg1.jpg'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -39,7 +59,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'GianottenLTW04-Regular',
-                    color: Color(0xFFC52127),
+                    color: Colors.black,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -56,19 +76,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 const SizedBox(height: 30),
                 // New Password Field
                 _buildInputField(
-                  controller: newPasswordController,
-                  label: 'New Password',
-                  icon: Icons.lock_outline,
-                  obscureText: true,
-                ),
+                    controller: newPasswordController,
+                    label: 'New Password',
+                    icon: Icons.lock_outline,
+                    obscureText: true,
+                    focusNode: newPasswordNode),
                 const SizedBox(height: 20),
                 // Confirm Password Field
                 _buildInputField(
-                  controller: confirmPasswordController,
-                  label: 'Confirm Password',
-                  icon: Icons.lock_outline,
-                  obscureText: true,
-                ),
+                    controller: confirmPasswordController,
+                    label: 'Confirm Password',
+                    icon: Icons.lock_outline,
+                    obscureText: true,
+                    focusNode: confirmPasswordNode),
                 const SizedBox(height: 30),
                 // Reset Password Button
                 ElevatedButton(
@@ -120,15 +140,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     required TextEditingController controller,
     required String label,
     required IconData icon,
+    required FocusNode focusNode,
     bool obscureText = false,
   }) {
     return TextField(
+      focusNode: focusNode,
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(
-          color: Color(0xFFC52127),
+          color: Color(0xFF0E3C3D),
           fontFamily: 'Arial_Regular',
         ),
         prefixIcon: Icon(
@@ -136,7 +158,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           color: Color(0xFFC52127),
         ),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.9),
+        fillColor: focusNode.hasFocus
+            ? Colors.white.withOpacity(0.5)
+            : Colors.grey.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

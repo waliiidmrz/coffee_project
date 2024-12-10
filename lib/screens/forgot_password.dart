@@ -9,6 +9,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController codeController = TextEditingController();
   bool isCodeSent = false;
+  final FocusNode forgotPasswordNode = FocusNode();
+  final FocusNode emailNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    forgotPasswordNode.addListener(() {
+      setState(() {});
+    });
+    emailNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    forgotPasswordNode.dispose();
+    emailNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         label: 'Email',
                         icon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
+                        focusNode: emailNode,
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
@@ -93,10 +114,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Column(
                     children: [
                       _buildInputField(
-                        controller: codeController,
-                        label: 'Verification Code',
-                        icon: Icons.lock_outline,
-                      ),
+                          controller: codeController,
+                          label: 'Verification Code',
+                          icon: Icons.lock_outline,
+                          focusNode: forgotPasswordNode),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
@@ -130,23 +151,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     required TextEditingController controller,
     required String label,
     required IconData icon,
+    required FocusNode focusNode,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
+      focusNode: focusNode,
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(
-          color: Color(0xFFC52127),
+          color: Color.fromARGB(255, 0, 0, 0),
           fontFamily: 'Arial_Regular',
         ),
         prefixIcon: Icon(
           icon,
-          color: Color(0xFFC52127),
+          color: const Color(0xFF0E3C3D),
         ),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.9),
+        fillColor: focusNode.hasFocus
+            ? Colors.white.withOpacity(0.5)
+            : Colors.grey.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
