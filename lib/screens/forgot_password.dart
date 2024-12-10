@@ -16,8 +16,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'assets/images/splash_background.png'), // Background image
+            image: AssetImage('assets/images/bg1.jpg'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -51,7 +50,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       : 'Please enter your email address to receive a reset code.',
                   style: const TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 9, 9, 9),
                     fontFamily: 'Arial_Regular',
                   ),
                   textAlign: TextAlign.center,

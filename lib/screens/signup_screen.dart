@@ -20,7 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final FocusNode phoneFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final FocusNode confirmPasswordFocusNode = FocusNode();
-
+  bool haveAccountClicked = false;
   String? nameError;
   String? lastnameError;
   String? emailError;
@@ -56,9 +56,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: null,
       body: Container(
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 241, 236, 237),
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage('assets/images/bg1.jpg'), // Path to your image
+            fit: BoxFit.cover, // Adjusts the image to cover the container
+          ),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           children: [
@@ -93,106 +108,121 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             // Scrollable bottom section
-            // Scrollable bottom section with background rectangle
             Expanded(
               child: Stack(
                 children: [
                   // White rectangle with rounded corners
                   Positioned.fill(
+                    top: -35,
                     child: Container(
                       margin: const EdgeInsets.all(40),
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        border: Border.all(
-                            color: Color.fromARGB(255, 0, 0, 0), width: 1),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
-                        ),
+                        color: const Color.fromARGB(28, 247, 245, 245)
+                            .withOpacity(0.9),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(25)),
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Colors.black.withOpacity(0.2), // Shadow color
+                            blurRadius: 10, // Spread of the shadow
+                            offset:
+                                const Offset(0, 4), // Positioning the shadow
+                          ),
+                        ],
                       ),
                     ),
                   ),
 
                   // Scrollable input fields and button
                   Positioned.fill(
-                    top: 20,
-                    bottom: 15,
+                    top: 5,
+                    bottom: 50,
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
                         children: [
-                          _buildInputField(
-                            controller: nameController,
-                            label: 'First Name',
-                            icon: Icons.person_outline,
-                            errorText: nameError,
-                            onChanged: (value) {
-                              setState(() {
-                                nameError = Validators.validateName(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          _buildInputField(
-                            controller: surnameController,
-                            label: 'Last Name',
-                            icon: Icons.person_outline,
-                            errorText: lastnameError,
-                            onChanged: (value) {
-                              setState(() {
-                                lastnameError =
-                                    Validators.validateLastName(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          _buildInputField(
-                            controller: emailController,
-                            label: 'Email',
-                            icon: Icons.email_outlined,
-                            keyboardType: TextInputType.emailAddress,
-                            errorText: emailError,
-                            onChanged: (value) {
-                              setState(() {
-                                emailError = Validators.validateEmail(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          _buildInputField(
-                            controller: phoneController,
-                            label: 'Phone Number',
-                            icon: Icons.phone_outlined,
-                            keyboardType: TextInputType.phone,
-                            errorText: phoneError,
-                            onChanged: (value) {
-                              setState(() {
-                                phoneError =
-                                    Validators.validatePhoneNumber(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          _buildInputField(
-                            controller: passwordController,
-                            label: 'Password',
-                            icon: Icons.lock_outline,
-                            obscureText: true,
-                            errorText: passwordError,
-                            onChanged: (value) {
-                              setState(() {
-                                passwordError =
-                                    Validators.validatePassword(value);
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          _buildInputField(
-                            controller: confirmPasswordController,
-                            label: 'Confirm Password',
-                            icon: Icons.lock_outline,
-                            obscureText: true,
+                          SizedBox(
+                            width: 270,
+                            child: Column(
+                              children: [
+                                _buildInputField(
+                                  controller: nameController,
+                                  label: 'First Name',
+                                  icon: Icons.person_outline,
+                                  errorText: nameError,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      nameError =
+                                          Validators.validateName(value);
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                _buildInputField(
+                                  controller: surnameController,
+                                  label: 'Last Name',
+                                  icon: Icons.person_outline,
+                                  errorText: lastnameError,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      lastnameError =
+                                          Validators.validateLastName(value);
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                _buildInputField(
+                                  controller: emailController,
+                                  label: 'Email',
+                                  icon: Icons.email_outlined,
+                                  keyboardType: TextInputType.emailAddress,
+                                  errorText: emailError,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      emailError =
+                                          Validators.validateEmail(value);
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                _buildInputField(
+                                  controller: phoneController,
+                                  label: 'Phone Number',
+                                  icon: Icons.phone_outlined,
+                                  keyboardType: TextInputType.phone,
+                                  errorText: phoneError,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      phoneError =
+                                          Validators.validatePhoneNumber(value);
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                _buildInputField(
+                                  controller: passwordController,
+                                  label: 'Password',
+                                  icon: Icons.lock_outline,
+                                  obscureText: true,
+                                  errorText: passwordError,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      passwordError =
+                                          Validators.validatePassword(value);
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                _buildInputField(
+                                  controller: confirmPasswordController,
+                                  label: 'Confirm Password',
+                                  icon: Icons.lock_outline,
+                                  obscureText: true,
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 30),
                           ElevatedButton(
@@ -211,7 +241,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFC52127),
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 100, vertical: 15),
+                                  horizontal: 50, vertical: 8),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
@@ -221,6 +251,121 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style:
                                   TextStyle(fontSize: 18, color: Colors.white),
                             ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: RichText(
+                              text: TextSpan(
+                                text: "Already have an account? ",
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 17.0),
+                                children: [
+                                  WidgetSpan(
+                                    alignment: PlaceholderAlignment.baseline,
+                                    baseline: TextBaseline.alphabetic,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          haveAccountClicked = true;
+                                        });
+                                        Navigator.pushNamed(context, '/login');
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0, vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                          color: haveAccountClicked
+                                              ? const Color.fromARGB(
+                                                  255, 171, 170, 170)
+                                              : const Color.fromRGBO(
+                                                  233, 231, 231, 0.3),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        child: const Text(
+                                          'Login',
+                                          style: TextStyle(
+                                              color: Color(0xFFC52127),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 19),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Facebook button
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Add Facebook login functionality
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(
+                                      15), // Adjust padding for button size
+                                  backgroundColor: const Color.fromARGB(
+                                      255, 38, 137, 219), // Facebook blue color
+                                ),
+                                child: Image.asset(
+                                  'assets/images/facebook.png', // Path to your Facebook logo asset
+                                  width: 30,
+                                  height: 30,
+                                ),
+                              ),
+                              const SizedBox(
+                                  width: 15), // Space between buttons
+
+                              // Google button
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Add Google login functionality
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(15),
+                                  backgroundColor: Colors
+                                      .white, // White background for Google button
+                                ),
+                                child: Image.asset(
+                                  'assets/images/google.png', // Path to your Google logo asset
+                                  width: 30,
+                                  height: 30,
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+
+                              // Apple button
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Add Apple login functionality
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  padding: const EdgeInsets.all(15),
+                                  backgroundColor: const Color.fromARGB(
+                                      255,
+                                      250,
+                                      250,
+                                      250), // Black background for Apple button
+                                ),
+                                child: Image.asset(
+                                  'assets/images/apple-logo.png', // Path to your Apple logo asset
+                                  width: 30,
+                                  height: 30,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -251,7 +396,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       onChanged: onChanged,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Color(0xFFC52127)),
+        prefixIcon: Icon(icon, color: const Color(0xFFC52127)),
         filled: true,
         fillColor: Colors.white.withOpacity(0.9),
         border: OutlineInputBorder(
