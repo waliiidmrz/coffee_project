@@ -1,4 +1,5 @@
 import 'package:coffee_project/data/mockuser.dart';
+import 'package:coffee_project/widgets/horizontalLine%20.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -223,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 33),
                 // Forgot Password
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
@@ -295,8 +296,80 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-
+                const SizedBox(
+                  height: 20,
+                ),
+                const HorizontalLine(
+                  height: 0.4,
+                  width: 300,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'or',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
                 const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Facebook button
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add Facebook login functionality
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(
+                            15), // Adjust padding for button size
+                        backgroundColor: Colors.white
+                            .withOpacity(0.9), // Facebook blue color
+                      ),
+                      child: Image.asset(
+                        'assets/images/facebook.png', // Path to your Facebook logo asset
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
+                    const SizedBox(width: 15), // Space between buttons
+
+                    // Google button
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add Google login functionality
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15),
+                        backgroundColor: Colors.white
+                            .withOpacity(0.9), // Facebook blue color
+                      ),
+                      child: Image.asset(
+                        'assets/images/google.png', // Path to your Google logo asset
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+
+                    // Apple button
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add Apple login functionality
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15),
+                        backgroundColor: Colors.white.withOpacity(0.9),
+                      ),
+                      child: Image.asset(
+                        'assets/images/apple-logo.png', // Path to your Apple logo asset
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
+                  ],
+                ),
                 // Signup Link
                 /* Container(
                   padding: const EdgeInsets.symmetric(

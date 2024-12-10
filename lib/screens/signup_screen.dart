@@ -317,74 +317,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Facebook button
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Add Facebook login functionality
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(
-                                      15), // Adjust padding for button size
-                                  backgroundColor: const Color.fromARGB(
-                                      255, 38, 137, 219), // Facebook blue color
-                                ),
-                                child: Image.asset(
-                                  'assets/images/facebook.png', // Path to your Facebook logo asset
-                                  width: 30,
-                                  height: 30,
-                                ),
-                              ),
-                              const SizedBox(
-                                  width: 15), // Space between buttons
-
-                              // Google button
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Add Google login functionality
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(15),
-                                  backgroundColor: Colors
-                                      .white, // White background for Google button
-                                ),
-                                child: Image.asset(
-                                  'assets/images/google.png', // Path to your Google logo asset
-                                  width: 30,
-                                  height: 30,
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-
-                              // Apple button
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Add Apple login functionality
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  shape: const CircleBorder(),
-                                  padding: const EdgeInsets.all(15),
-                                  backgroundColor: const Color.fromARGB(
-                                      255,
-                                      250,
-                                      250,
-                                      250), // Black background for Apple button
-                                ),
-                                child: Image.asset(
-                                  'assets/images/apple-logo.png', // Path to your Apple logo asset
-                                  width: 30,
-                                  height: 30,
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -392,6 +324,69 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ],
               ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Facebook button
+                ElevatedButton(
+                  onPressed: () {
+                    // Add Facebook login functionality
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(
+                        15), // Adjust padding for button size
+                    backgroundColor:
+                        Colors.white.withOpacity(0.9), // Facebook blue color
+                  ),
+                  child: Image.asset(
+                    'assets/images/facebook.png', // Path to your Facebook logo asset
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+                const SizedBox(width: 15), // Space between buttons
+
+                // Google button
+                ElevatedButton(
+                  onPressed: () {
+                    // Add Google login functionality
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(15),
+                    backgroundColor:
+                        Colors.white.withOpacity(0.9), // Facebook blue color
+                  ),
+                  child: Image.asset(
+                    'assets/images/google.png', // Path to your Google logo asset
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+                const SizedBox(width: 15),
+
+                // Apple button
+                ElevatedButton(
+                  onPressed: () {
+                    // Add Apple login functionality
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(),
+                    padding: const EdgeInsets.all(15),
+                    backgroundColor: Colors.white.withOpacity(0.9),
+                  ),
+                  child: Image.asset(
+                    'assets/images/apple-logo.png', // Path to your Apple logo asset
+                    width: 30,
+                    height: 30,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
