@@ -44,6 +44,16 @@ class Validators {
     return null;
   }
 
+  static String? validateConfirmPassword(String value, String password) {
+    if (value.isEmpty) {
+      return 'You have to Confirm password';
+    }
+    if (value != password) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
+
   // Validate phone number (exactly 8 digits)
   static String? validatePhoneNumber(String value) {
     if (value.isEmpty) {

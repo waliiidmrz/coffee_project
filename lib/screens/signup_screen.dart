@@ -72,7 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
               blurRadius: 10,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -149,6 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Column(
                               children: [
                                 _buildInputField(
+                                  focusNode: nameFocusNode,
                                   controller: nameController,
                                   label: 'First Name',
                                   icon: Icons.person_outline,
@@ -162,6 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 _buildInputField(
+                                  focusNode: surnameFocusNode,
                                   controller: surnameController,
                                   label: 'Last Name',
                                   icon: Icons.person_outline,
@@ -175,6 +177,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 _buildInputField(
+                                  focusNode: emailFocusNode,
                                   controller: emailController,
                                   label: 'Email',
                                   icon: Icons.email_outlined,
@@ -189,6 +192,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 _buildInputField(
+                                  focusNode: phoneFocusNode,
                                   controller: phoneController,
                                   label: 'Phone Number',
                                   icon: Icons.phone_outlined,
@@ -203,6 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 _buildInputField(
+                                  focusNode: passwordFocusNode,
                                   controller: passwordController,
                                   label: 'Password',
                                   icon: Icons.lock_outline,
@@ -217,10 +222,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 _buildInputField(
+                                  focusNode: confirmPasswordFocusNode,
                                   controller: confirmPasswordController,
                                   label: 'Confirm Password',
                                   icon: Icons.lock_outline,
                                   obscureText: true,
+                                  errorText: Validators.validateConfirmPassword(
+                                    confirmPasswordController.text,
+                                    passwordController.text,
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
                                 ),
                               ],
                             ),
@@ -389,6 +402,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required TextEditingController controller,
     required String label,
     required IconData icon,
+    required FocusNode focusNode,
     String? errorText,
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
@@ -400,10 +414,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
       obscureText: obscureText,
       onChanged: onChanged,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(
+            color: Color(0xFFC52127),
+            width: 1,
+          ),
+        ),
         labelText: label,
+        labelStyle: const TextStyle(
+          color: Color(0xFF0E3C3D),
+          fontFamily: 'Arial_Regular',
+        ),
         prefixIcon: Icon(icon, color: const Color(0xFFC52127)),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.9),
+        fillColor: Colors.white.withOpacity(0.7),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     filled: true,
                     fillColor: emailFocusNode.hasFocus
-                        ? Colors.white
+                        ? Colors.white.withOpacity(0.5)
                         : Colors.grey.withOpacity(0.1),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -143,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(
                         color: Color(0xFFC52127),
-                        width: 2,
+                        width: 1,
                       ),
                     ),
                     contentPadding: const EdgeInsets.all(16),
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         : null, // Show the icon only if the field has focus and contains text
                     filled: true,
                     fillColor: passwordFocusNode.hasFocus
-                        ? Colors.white
+                        ? Colors.white.withOpacity(0.5)
                         : Colors.grey.withOpacity(0.1),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -226,25 +226,52 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
                 // Forgot Password
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/forgot_password');
-                      },
-                      child: const Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          color: Color(0xFF0E3C3D),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Arial_Regular',
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/forgot_password');
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Color(0xFF0E3C3D),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Arial_Regular',
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/signup');
+                          },
+                          child: const Text(
+                            'Register now',
+                            style: TextStyle(
+                                color: Color(0xFFC52127),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                shadows: [
+                                  Shadow(
+                                      offset: Offset(2, 0),
+                                      blurRadius: 10,
+                                      color: Color.fromARGB(31, 73, 72, 72))
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
                 const SizedBox(height: 30),
                 // Login Button
                 ElevatedButton(
@@ -254,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     shadowColor: const Color(0xFFC52127).withOpacity(0.5),
                     elevation: 8,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 100, vertical: 15),
+                        horizontal: 60, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
@@ -262,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Text(
                     'Login',
                     style: TextStyle(
-                      fontSize: 22,
+                      fontSize: 24,
                       color: Colors.white,
                       fontFamily: 'Arial_Regular',
                     ),
@@ -271,43 +298,60 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
                 // Signup Link
-                RichText(
-                  text: TextSpan(
-                    text: "Don't have an account? ",
-                    style: const TextStyle(color: Colors.black, fontSize: 14.0),
-                    children: [
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.baseline,
-                        baseline: TextBaseline.alphabetic,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isRegisterClicked = true;
-                            });
-                            Navigator.pushNamed(context, '/signup');
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 4.0),
-                            decoration: BoxDecoration(
-                              color: isRegisterClicked
-                                  ? const Color.fromARGB(255, 171, 170, 170)
-                                  : const Color.fromRGBO(233, 231, 231, 0.3),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            child: const Text(
-                              'Register now',
-                              style: TextStyle(
-                                color: Color(0xFFC52127),
-                                fontWeight: FontWeight.bold,
+                /* Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 6.0),
+                  decoration: BoxDecoration(
+                      color: isRegisterClicked
+                          ? const Color.fromARGB(255, 171, 170, 170)
+                          : const Color.fromRGBO(233, 231, 231, 0.6),
+                      borderRadius: BorderRadius.circular(12.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
+                      ]),
+                  child: RichText(
+                    text: TextSpan(
+                      text: "Don't have an account? ",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 17.0,
+                      ),
+                      children: [
+                        WidgetSpan(
+                          alignment: PlaceholderAlignment.baseline,
+                          baseline: TextBaseline.alphabetic,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isRegisterClicked = true;
+                              });
+                              Navigator.pushNamed(context, '/signup');
+                            },
+                            child: Container(
+                              child: const Text(
+                                'Register now',
+                                style: TextStyle(
+                                    color: Color(0xFFC52127),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    shadows: [
+                                      Shadow(
+                                          offset: Offset(2, 0),
+                                          blurRadius: 10,
+                                          color: Colors.white)
+                                    ]),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ),*/
               ],
             ),
           ),
