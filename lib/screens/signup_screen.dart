@@ -58,10 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/splash_background.png'),
-            fit: BoxFit.cover,
-          ),
+          color: Color.fromARGB(255, 241, 236, 237),
         ),
         child: Column(
           children: [
@@ -81,7 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       fontFamily: 'GianottenLTW04-Regular',
                       fontSize: 30,
                       fontWeight: FontWeight.w500,
-                      color: Color.fromARGB(255, 255, 255, 255),
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                   const Text(
@@ -89,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextStyle(
                       fontFamily: 'Arial_Regular',
                       fontSize: 16,
-                      color: Colors.white70,
+                      color: Color.fromARGB(179, 55, 54, 54),
                     ),
                   ),
                 ],
@@ -103,7 +100,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   // White rectangle with rounded corners
                   Positioned.fill(
                     child: Container(
-                      margin: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(40),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.9),
                         border: Border.all(
