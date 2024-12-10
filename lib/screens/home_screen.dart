@@ -4,6 +4,7 @@ import '../widgets/product_card.dart';
 import 'GiftCardScreen.dart';
 import 'My_Orders.dart';
 import 'ProfileScreen.dart';
+import 'ProductDetailsScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,18 +15,61 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  String _selectedFilter = 'All';
 
-  final List<Widget> _screens = [
-    HomeContent(), // Main home content
-    MyOrdersScreen(),
-    GiftCardScreen(),
-    ProfileScreen(),
+  final List<Product> products = [
+    Product(
+        name: 'Espresso',
+        price: 2.99,
+        imageUrl: 'assets/images/espresso.png',
+        isPromo: true),
+    Product(
+        name: 'Cappuccino',
+        price: 3.49,
+        imageUrl: 'assets/images/cappuccino.png',
+        isPromo: false),
+    Product(
+        name: 'Latte',
+        price: 3.99,
+        imageUrl: 'assets/images/latte.png',
+        isPromo: true),
+    Product(
+        name: 'Mocha',
+        price: 4.29,
+        imageUrl: 'assets/images/mocha.png',
+        isPromo: false),
+    Product(
+        name: 'Macchiato',
+        price: 3.79,
+        imageUrl: 'assets/images/macchiato.png',
+        isPromo: true),
+    Product(
+        name: 'Americano',
+        price: 2.89,
+        imageUrl: 'assets/images/americano.png',
+        isPromo: false),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          HomeContent(
+            products: products,
+            selectedFilter: _selectedFilter,
+            onFilterChange: (filter) {
+              setState(() {
+                _selectedFilter = filter;
+              });
+            },
+          ),
+          MyOrdersScreen(),
+          GiftCardScreen(),
+          ProfileScreen(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFFC52127),
@@ -67,184 +111,148 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class HomeContent extends StatelessWidget {
-  final List<Product> products = [
-    Product(
-      name: 'Espresso',
-      price: 2.99,
-      imageUrl: 'assets/images/espresso.png',
-    ),
-    Product(
-      name: 'Cappuccino',
-      price: 3.49,
-      imageUrl: 'assets/images/cappuccino.png',
-    ),
-    Product(
-      name: 'Latte',
-      price: 3.99,
-      imageUrl: 'assets/images/latte.png',
-    ),
-    Product(
-      name: 'Mocha',
-      price: 4.29,
-      imageUrl: 'assets/images/mocha.png',
-    ),
-    Product(
-      name: 'Macchiato',
-      price: 3.79,
-      imageUrl: 'assets/images/macchiato.png',
-    ),
-    Product(
-      name: 'Americano',
-      price: 2.89,
-      imageUrl: 'assets/images/americano.png',
-    ),
-  ];
+  final List<Product> products;
+  final String selectedFilter;
+  final ValueChanged<String> onFilterChange;
+
+  const HomeContent({
+    Key? key,
+    required this.products,
+    required this.selectedFilter,
+    required this.onFilterChange,
+  }) : super(key: key);
+
+  List<Product> get filteredProducts {
+    if (selectedFilter == 'All') {
+      return products;
+    } else if (selectedFilter == 'Promo') {
+      return products.where((p) => p.isPromo).toList();
+    } else if (selectedFilter == 'Best Sale') {
+      return products.take(3).toList();
+    }
+    return products;
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Good Morning, Jane',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Search for beverages or foods',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications_outlined,
-                      color: Colors.black87,
-                    ),
-                    onPressed: () {
-                      // Notification logic
-                    },
-                  ),
-                ],
-              ),
-            ),
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.search),
-                  hintText: 'Search beverages or foods',
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide.none,
+      child: Column(
+        children: [
+          // Title and Search Bar
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Welcome Back!',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Promo Banner
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: const Color(0xFFC52127),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Special Offer: Buy 1 Get 1 FREE!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                const SizedBox(height: 8),
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search for beverages or foods',
+                    prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      borderSide: BorderSide.none,
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle promo action
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Order Now',
-                      style: TextStyle(
-                        color: Color(0xFFC52127),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Product Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Text(
-                'Best Offers',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 20),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(0.0),
+          ),
+          // Filters
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FilterButton(
+                  label: 'All',
+                  isActive: selectedFilter == 'All',
+                  onTap: () => onFilterChange('All'),
+                ),
+                FilterButton(
+                  label: 'Promo',
+                  isActive: selectedFilter == 'Promo',
+                  onTap: () => onFilterChange('Promo'),
+                ),
+                FilterButton(
+                  label: 'Best Sale',
+                  isActive: selectedFilter == 'Best Sale',
+                  onTap: () => onFilterChange('Best Sale'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Products Grid
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                childAspectRatio: 0.8,
+                childAspectRatio: 0.75,
               ),
-              itemCount: products.length,
+              itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
-                final product = products[index];
+                final product = filteredProducts[index];
                 return ProductCard(
                   product: product,
-                  onAddToCart: () {
-                    print('${product.name} added to cart');
-                  },
+                  onAddToCart: () => print('${product.name} added to cart'),
+                  onViewDetails: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ProductDetailsScreen(product: product),
+                    ),
+                  ),
                 );
               },
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilterButton extends StatelessWidget {
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const FilterButton({
+    Key? key,
+    required this.label,
+    required this.onTap,
+    this.isActive = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isActive ? const Color(0xFFC52127) : Colors.white,
+        side: const BorderSide(color: Color(0xFFC52127)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: isActive ? Colors.white : const Color(0xFFC52127),
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 }
-// Compare this snippet from lib/screens/admin_dashboard.dart:
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
