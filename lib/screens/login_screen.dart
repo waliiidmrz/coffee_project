@@ -313,50 +313,36 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Facebook button
                     ElevatedButton(
-                      onPressed: () {
-                        // Add Facebook login functionality
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: const CircleBorder(),
-                        padding: const EdgeInsets.all(
-                            15), // Adjust padding for button size
-                        backgroundColor: Colors.white
-                            .withOpacity(0.9), // Facebook blue color
-                      ),
-                      child: Image.asset(
-                        'assets/images/facebook.png', // Path to your Facebook logo asset
-                        width: 30,
-                        height: 30,
-                      ),
-                    ),
-                    const SizedBox(width: 15), // Space between buttons
-
-                    // Google button
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add Google login functionality
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(15),
-                        backgroundColor: Colors.white
-                            .withOpacity(0.9), // Facebook blue color
+                        backgroundColor: Colors.white.withOpacity(0.9),
                       ),
                       child: Image.asset(
-                        'assets/images/google.png', // Path to your Google logo asset
+                        'assets/images/facebook.png',
                         width: 30,
                         height: 30,
                       ),
                     ),
                     const SizedBox(width: 15),
-
-                    // Apple button
                     ElevatedButton(
-                      onPressed: () {
-                        // Add Apple login functionality
-                      },
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        shape: const CircleBorder(),
+                        padding: const EdgeInsets.all(15),
+                        backgroundColor: Colors.white.withOpacity(0.9),
+                      ),
+                      child: Image.asset(
+                        'assets/images/google.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    ElevatedButton(
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         padding: const EdgeInsets.all(15),

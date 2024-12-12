@@ -16,10 +16,10 @@ class AdminDashboard extends StatelessWidget {
         ),
         backgroundColor: const Color(0xFFC52127),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               'Welcome, Admin!',
               style: TextStyle(

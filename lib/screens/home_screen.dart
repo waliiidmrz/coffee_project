@@ -1,4 +1,6 @@
 import 'package:coffee_project/providers/provider.dart';
+import 'package:coffee_project/widgets/custo_sidebar.dart';
+import 'package:coffee_project/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
@@ -52,6 +54,8 @@ class HomeScreen extends StatelessWidget {
     String selectedFilter = 'All';
 
     return Scaffold(
+      appBar: const CustomAppBar(title: 'Bisou'),
+      endDrawer: const CustomSidebar(),
       body: Column(
         children: [
           // Header and Search Bar
@@ -60,31 +64,96 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Welcome Back!',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search for beverages or foods',
-                    prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                      borderSide: BorderSide.none,
+                SizedBox(
+                  width: 300,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(Icons.candlestick_chart_outlined),
+                      hintText: 'Search for beverages or foods',
+                      prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          // Product Grid
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 40, bottom: 5),
+            child: Container(
+              height: 150,
+              width: 500,
+              alignment: Alignment.topRight,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 20,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        color: Colors.grey[200]!.withOpacity(.6),
+                        height: 141,
+                        width: 250,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 30,
+                    right: 80,
+                    child: Image.asset(
+                      'assets/images/breakfast.png',
+                      width: 150,
+                    ),
+                  ),
+                  Positioned(
+                    top: 10,
+                    left: 30,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        color: Colors.white,
+                        child: const Text(
+                          '  PROMO  ',
+                          style: TextStyle(
+                              fontFamily: 'Quicksand',
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Positioned(
+                    left: 40,
+                    top: 40,
+                    child: Text(
+                      'Petit Déj ',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          fontFamily: 'OpenSans'),
+                    ),
+                  ),
+                  Positioned(
+                    left: 40,
+                    top: 60,
+                    child: Text(
+                      'Bisou',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          fontFamily: 'OpenSans',
+                          color: Colors.grey.withOpacity(.7)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           Expanded(
             child: GridView.builder(
               itemCount: getFilteredProducts(selectedFilter).length,
