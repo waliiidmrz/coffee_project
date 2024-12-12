@@ -1,4 +1,5 @@
 import 'package:coffee_project/providers/provider.dart';
+import 'package:coffee_project/screens/admin_dashboard_screen.dart';
 import 'package:coffee_project/screens/forgot_password.dart';
 import 'package:coffee_project/screens/reset_password.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'screens/start_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/admin_dashboard.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignUpScreen(),
           '/home': (context) => HomeScreen(),
-          '/adminDashboard': (context) => const AdminDashboard(),
+          '/adminDashboard': (context) => const AdminDashboardScreen(),
           '/forgot_password': (context) => ForgotPasswordScreen(),
           '/reset_password': (context) => ResetPasswordScreen(),
         },
