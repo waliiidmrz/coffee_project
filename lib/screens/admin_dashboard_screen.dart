@@ -1,7 +1,66 @@
 import 'package:flutter/material.dart';
+import '../widgets/menu_item_card.dart';
+import '../screens/cart_screen.dart';
 
-class AdminDashboardScreen extends StatelessWidget {
+class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  _AdminDashboardScreenState createState() => _AdminDashboardScreenState();
+}
+
+class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
+  final List<Map<String, dynamic>> _cart = [];
+  final Map<String, dynamic> _user = {
+    'name': 'John Doe',
+    'points': 150,
+    'giftCard': '\$25',
+    'profilePicture': 'https://via.placeholder.com/100',
+  };
+
+  double get _total =>
+      _cart.fold(0, (sum, item) => sum + (item['price'] * item['quantity']));
+
+  void _addToCart(String name, double price) {
+    setState(() {
+      final existingItem = _cart.firstWhere(
+        (item) => item['name'] == name,
+        orElse: () => {'name': '', 'price': 0.0, 'quantity': 0},
+      );
+
+      if (existingItem['name'] == name) {
+        existingItem['quantity'] += 1;
+      } else {
+        _cart.add({'name': name, 'price': price, 'quantity': 1});
+      }
+    });
+  }
+
+  void _updateCartQuantity(int index, int quantity) {
+    setState(() {
+      if (quantity > 0) {
+        _cart[index]['quantity'] = quantity;
+      } else {
+        _cart.removeAt(index);
+      }
+    });
+  }
+
+  void _removeItemFromCart(int index) {
+    setState(() {
+      _cart.removeAt(index);
+    });
+  }
+
+  void _passOrder() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Order has been placed successfully!')),
+    );
+
+    setState(() {
+      _cart.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,13 +68,54 @@ class AdminDashboardScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
         backgroundColor: const Color(0xFFC52127),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(
+                        cartItems: _cart,
+                        updateCartQuantity: _updateCartQuantity,
+                        passOrder: _passOrder,
+                        removeItem: _removeItemFromCart,
+                      ),
+                    ),
+                  ).then((_) => setState(() {})); // Update cart count
+                },
+              ),
+              if (_cart.isNotEmpty)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${_cart.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Text and Search Bar
             const Text(
               'Welcome, Admin!',
               style: TextStyle(
@@ -24,22 +124,7 @@ class AdminDashboardScreen extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 8),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search for users or orders',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
             const SizedBox(height: 16),
-
-            // Card with User Image and Details
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -49,33 +134,40 @@ class AdminDashboardScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    // User Image
+                    // User Profile Picture
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        'https://via.placeholder.com/100',
+                        _user['profilePicture'],
                         height: 80,
                         width: 80,
                         fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(width: 16),
-                    // User Details
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
-                            'John Doe',
-                            style: TextStyle(
+                            _user['name'],
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'Last Order: Cappuccino',
-                            style: TextStyle(
+                            'Points: ${_user['points']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Gift Card: ${_user['giftCard']}',
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
                             ),
@@ -83,29 +175,11 @@ class AdminDashboardScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Logic to place an order for this user
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFC52127),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        'Order',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
-
             const SizedBox(height: 16),
-
-            // Menu Section
             const Text(
               'Menu Items',
               style: TextStyle(
@@ -116,7 +190,7 @@ class AdminDashboardScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Expanded(
               child: GridView.builder(
-                itemCount: 10, // Replace with the number of menu items
+                itemCount: 10,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
@@ -124,66 +198,13 @@ class AdminDashboardScreen extends StatelessWidget {
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (context, index) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 4,
-                    child: Column(
-                      children: [
-                        // Menu Image
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12),
-                          ),
-                          child: Image.network(
-                            'https://via.placeholder.com/150',
-                            height: 100,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Menu Item ${index + 1}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '\$${(index + 1) * 2.5}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Logic to add menu item to the order
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFC52127),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Add to Order',
-                                  style: TextStyle(fontSize: 14),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  final name = 'Menu Item ${index + 1}';
+                  final price = (index + 1) * 2.5;
+
+                  return MenuItemCard(
+                    name: name,
+                    price: price,
+                    onAddToCart: () => _addToCart(name, price),
                   );
                 },
               ),
