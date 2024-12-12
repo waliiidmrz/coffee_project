@@ -75,6 +75,9 @@ flutter:
     - family: GianottenLTW04-Regular
       fonts:
         - asset: assets/fonts/Gianotten LT W04 Regular.ttf
+    - family: Montez-Regular
+      fonts:
+        - asset: assets/fonts/Montez-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
