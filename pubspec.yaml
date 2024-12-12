@@ -78,6 +78,10 @@ flutter:
     - family: Montez-Regular
       fonts:
         - asset: assets/fonts/Montez-Regular.ttf
+    - family: Countryside
+      fonts : 
+        - asset: assets/fonts/Countryside1.ttf
+  
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
