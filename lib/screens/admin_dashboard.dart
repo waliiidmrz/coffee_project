@@ -42,20 +42,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ),
         backgroundColor: const Color(0xFFC52127),
       ),
-<<<<<<< HEAD
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-=======
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
->>>>>>> c0b447fb63056d5238b522070753ea3ad75bfae0
               'Welcome, Admin!',
               style: TextStyle(
                 fontSize: 24,
