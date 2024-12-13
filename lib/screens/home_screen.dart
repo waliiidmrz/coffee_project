@@ -75,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
     String selectedFilter = 'All';
 
     return Scaffold(
-      endDrawer: const CustomSidebar(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

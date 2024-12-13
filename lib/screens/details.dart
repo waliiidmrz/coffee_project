@@ -1,4 +1,5 @@
-import 'package:coffee_project/screens/pass_new_order.dart';
+import 'package:coffee_project/screens/admin_order_management_screen.dart';
+import 'package:coffee_project/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/product.dart';
@@ -250,7 +251,7 @@ class _DetailState extends State<Detail> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PassNewOrderScreen(),
+                  builder: (context) => const OrderScreen(),
                 ),
               ),
               title: 'Buy Now',

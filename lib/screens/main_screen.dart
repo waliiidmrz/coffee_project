@@ -1,6 +1,7 @@
 import 'package:coffee_project/screens/GiftCardScreen.dart';
 import 'package:coffee_project/screens/My_Orders.dart';
 import 'package:coffee_project/screens/ProfileScreen.dart';
+import 'package:coffee_project/widgets/custo_sidebar.dart';
 import 'package:coffee_project/widgets/custom_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Bisou'),
+      appBar: const CustomAppBar(title: 'Bisou'),
+      endDrawer: const CustomSidebar(),
       body: PersistentTabView(
         context,
         controller: _controller,
