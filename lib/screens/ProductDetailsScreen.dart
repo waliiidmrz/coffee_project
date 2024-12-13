@@ -11,81 +11,75 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          product.name,
-          style: const TextStyle(fontFamily: 'Arial', fontSize: 20),
-        ),
-        backgroundColor: const Color(0xFFC52127),
-      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Product Image
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(20),
-                  ),
-                  child: Image.asset(
-                    product.imageUrl,
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Container(
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black.withOpacity(0.3),
-                        Colors.transparent,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 20,
-                  left: 20,
-                  child: Text(
-                    product.name,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                          offset: Offset(0, 2),
-                          blurRadius: 4,
-                          color: Colors.black54,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Container(
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                          color: const Color.fromARGB(255, 243, 4, 4)
+                              .withOpacity(0.15), // Shadow color with opacity
+                          blurRadius: 8, // How blurry the shadow is
+                          offset: const Offset(2, 0), // Position of the shadow
                         ),
-                      ],
+                      ]),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            product.imageUrl,
+                            width: 315,
+                            height: 250,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      bottom: 20,
+                      left: 50,
+                      child: Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Demohirosinregular',
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(10, 2),
+                              blurRadius: 4,
+                              color: Color.fromARGB(135, 4, 4, 4),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 20),
-            // Product Price and Add to Cart
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '\$${product.price.toStringAsFixed(2)}',
+                    ' ${product.price.toStringAsFixed(2)}\ DT',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFFC52127),
+                      color: Color.fromARGB(255, 35, 79, 48),
                     ),
                   ),
                   ElevatedButton(
@@ -119,14 +113,6 @@ class ProductDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Product Details',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
                     'This is a premium quality product made with the finest ingredients. Perfect for those who enjoy the best in life. Enjoy the rich taste and aroma that will leave you wanting more!',
                     style: TextStyle(fontSize: 16, height: 1.5),
                   ),
@@ -134,6 +120,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   const Text(
                     'Ingredients',
                     style: TextStyle(
+                      fontFamily: 'Roadster',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),

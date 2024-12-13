@@ -2,7 +2,6 @@ import 'package:coffee_project/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/custo_sidebar.dart';
-import '../widgets/custom_appbar.dart';
 import '../widgets/category_item.dart';
 import '../models/product.dart';
 import '../widgets/product_card.dart';
@@ -76,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
     String selectedFilter = 'All';
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Bisou'),
       endDrawer: const CustomSidebar(),
       body: SingleChildScrollView(
         child: Column(
@@ -108,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 16.0, bottom: 10.0),
               child: SizedBox(
-                height: 40, // Adjust height as needed
+                height: 40,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: list.length,

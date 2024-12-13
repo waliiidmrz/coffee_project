@@ -81,6 +81,35 @@ flutter:
     - family: Countryside
       fonts : 
         - asset: assets/fonts/Countryside1.ttf
+    - family: Butterfly
+      fonts : 
+        - asset: assets/fonts/Butterfly.otf
+    - family: Cassandra
+      fonts : 
+        - asset: assets/fonts/Cassandra.ttf
+    - family: Demohirosinregular
+      fonts : 
+        - asset: assets/fonts/Demohirosinregular.otf
+    - family: Chalga
+      fonts : 
+        - asset: assets/fonts/Chalga.otf
+    - family: Csnolan
+      fonts : 
+        - asset: assets/fonts/Csnolan.otf
+    - family: Cspercy
+      fonts : 
+        - asset: assets/fonts/Cspercy.otf
+    - family: Lakehouse
+      fonts : 
+        - asset: assets/fonts/Lakehouse.otf
+    - family: Roadster
+      fonts : 
+        - asset: assets/fonts/Roadster.ttf
+    - family: Volney
+      fonts : 
+        - asset: assets/fonts/Volney.otf
+    
+    
   
   # To add assets to your application, add an assets section, like this:
   assets:
