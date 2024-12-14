@@ -45,12 +45,9 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   image_picker: ^0.8.4+4
   flutter_animate: 4.5.0
-<<<<<<< Updated upstream
   wheel_picker: ^0.1.1
 
-=======
   fl_chart: ^0.69.2
->>>>>>> Stashed changes
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
