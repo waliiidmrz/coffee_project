@@ -1,25 +1,25 @@
+import 'package:coffee_project/widgets/UserCard.dart';
 import 'package:flutter/material.dart';
+import 'StatisticsScreen.dart';
 
 class User {
   final String name;
+  final String lastname;
   final String email;
   final String phoneNumber;
   final String profileImage;
   final String role; // "user" or "admin"
   bool isBlocked;
-  int points;
-  double giftCardBalance;
   DateTime? birthDate;
 
   User({
     required this.name,
+    required this.lastname,
     required this.email,
     required this.phoneNumber,
     required this.profileImage,
     required this.role,
     this.isBlocked = false,
-    this.points = 0,
-    this.giftCardBalance = 0.0,
     this.birthDate,
   });
 }
@@ -34,44 +34,251 @@ class AdminUserListScreen extends StatefulWidget {
 class _AdminUserListScreenState extends State<AdminUserListScreen> {
   final List<User> users = [
     User(
-      name: 'John Doe',
+      name: 'John',
+      lastname: 'Doe',
       email: 'john.doe@example.com',
       phoneNumber: '+1 234 567 890',
       profileImage: 'https://via.placeholder.com/150',
       role: 'user',
-      points: 120,
-      giftCardBalance: 50.0,
+      isBlocked: false,
       birthDate: DateTime(1990, 5, 15),
     ),
     User(
-      name: 'Jane Smith',
+      name: 'Jane',
+      lastname: 'Smith',
       email: 'jane.smith@example.com',
       phoneNumber: '+1 987 654 321',
       profileImage: 'https://via.placeholder.com/150',
       role: 'user',
       isBlocked: true,
-      points: 200,
-      giftCardBalance: 30.0,
       birthDate: DateTime(1992, 8, 22),
     ),
     User(
-      name: 'Admin User',
+      name: 'Admin',
+      lastname: 'User',
       email: 'admin@example.com',
       phoneNumber: '+1 555 123 456',
       profileImage: 'https://via.placeholder.com/150',
       role: 'admin',
+      isBlocked: false,
       birthDate: DateTime(1985, 3, 10),
     ),
   ];
 
-  String filterRole = 'all'; // Filter: all, user, admin
+  String filterRole = 'all';
+
+  void _toggleBlockUser(User user) {
+    setState(() {
+      user.isBlocked = !user.isBlocked;
+    });
+  }
+
+  void _deleteUser(User user) {
+    setState(() {
+      users.remove(user);
+    });
+  }
+
+  void _addUserDialog(BuildContext context, String role) {
+    final nameController = TextEditingController();
+    final lastnameController = TextEditingController();
+    final emailController = TextEditingController();
+    final phoneController = TextEditingController();
+    DateTime? birthDate;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor:
+                    role == 'admin' ? Colors.blueAccent : Colors.orangeAccent,
+                child: Icon(
+                  role == 'admin'
+                      ? Icons.admin_panel_settings
+                      : Icons.person_add,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Add ${role == 'admin' ? 'Admin' : 'User'}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildTextField(
+                  controller: nameController,
+                  label: 'First Name',
+                  icon: Icons.person,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: lastnameController,
+                  label: 'Last Name',
+                  icon: Icons.person_outline,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: emailController,
+                  label: 'Email Address',
+                  icon: Icons.email,
+                  inputType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: phoneController,
+                  label: 'Phone Number',
+                  icon: Icons.phone,
+                  inputType: TextInputType.phone,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurpleAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  onPressed: () async {
+                    final selectedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (selectedDate != null) {
+                      birthDate = selectedDate;
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_today, color: Colors.white),
+                  label: Text(
+                    birthDate == null
+                        ? 'Select Birthdate'
+                        : 'Selected: ${birthDate!.toLocal().toString().split(' ')[0]}',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.redAccent,
+              ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: () {
+                if (nameController.text.isEmpty ||
+                    lastnameController.text.isEmpty ||
+                    emailController.text.isEmpty ||
+                    phoneController.text.isEmpty ||
+                    birthDate == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please fill in all fields.'),
+                      backgroundColor: Colors.redAccent,
+                    ),
+                  );
+                  return;
+                }
+
+                setState(() {
+                  users.add(
+                    User(
+                      name: nameController.text,
+                      lastname: lastnameController.text,
+                      email: emailController.text,
+                      phoneNumber: phoneController.text,
+                      profileImage: 'https://via.placeholder.com/150',
+                      role: role,
+                      birthDate: birthDate,
+                    ),
+                  );
+                });
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      '${role == 'admin' ? 'Admin' : 'User'} added successfully!',
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              },
+              child: const Text(
+                'Add',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType inputType = TextInputType.text,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(fontSize: 14),
+        prefixIcon: Icon(icon, color: Colors.deepPurpleAccent),
+        filled: true,
+        fillColor: Colors.grey[200],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.deepPurpleAccent),
+        ),
+      ),
+    );
+  }
 
   void _showUserDetails(BuildContext context, User user) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Details for ${user.name}'),
+          title: Text('Details for ${user.name} ${user.lastname}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,10 +293,6 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
               if (user.birthDate != null)
                 Text(
                     'Birthday: ${user.birthDate!.toLocal().toString().split(' ')[0]}'),
-              if (user.role == 'user') Text('Points: ${user.points}'),
-              if (user.role == 'user')
-                Text(
-                    'Gift Card Balance: \$${user.giftCardBalance.toStringAsFixed(2)}'),
             ],
           ),
           actions: [
@@ -103,87 +306,15 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
     );
   }
 
-  void _toggleBlockUser(User user) {
-    setState(() {
-      user.isBlocked = !user.isBlocked;
-    });
-  }
-
-  void _deleteUser(User user) {
-    setState(() {
-      users.remove(user);
-    });
-  }
-
-  void _addAdminUser() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        final nameController = TextEditingController();
-        final emailController = TextEditingController();
-        final phoneController = TextEditingController();
-        DateTime? birthDate;
-
-        return AlertDialog(
-          title: const Text('Add New Admin'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-              ),
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-              ),
-              TextField(
-                controller: phoneController,
-                decoration: const InputDecoration(labelText: 'Phone Number'),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  final selectedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-                  if (selectedDate != null) {
-                    birthDate = selectedDate;
-                  }
-                },
-                child: const Text('Select Birthdate'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  users.add(
-                    User(
-                      name: nameController.text,
-                      email: emailController.text,
-                      phoneNumber: phoneController.text,
-                      profileImage: 'https://via.placeholder.com/150',
-                      role: 'admin',
-                      birthDate: birthDate,
-                    ),
-                  );
-                });
-                Navigator.pop(context);
-              },
-              child: const Text('Add'),
-            ),
-          ],
-        );
-      },
+  void _navigateToStatistics() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StatisticsScreen(
+          userCount: users.where((user) => user.role == 'user').length,
+          adminCount: users.where((user) => user.role == 'admin').length,
+        ),
+      ),
     );
   }
 
@@ -195,59 +326,30 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User List'),
-        backgroundColor: const Color(0xFFC52127),
+        title: const Text(''),
+        backgroundColor: const Color.fromARGB(255, 251, 250, 250),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_alt),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.group),
-                        title: const Text('All Users'),
-                        onTap: () {
-                          setState(() {
-                            filterRole = 'all';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.person),
-                        title: const Text('Users'),
-                        onTap: () {
-                          setState(() {
-                            filterRole = 'user';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.admin_panel_settings),
-                        title: const Text('Admins'),
-                        onTap: () {
-                          setState(() {
-                            filterRole = 'admin';
-                          });
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              setState(() {
+                filterRole = value;
+              });
             },
-            tooltip: 'Filter Users',
-          ),
-          IconButton(
-            icon: const Icon(Icons.person_add),
-            onPressed: _addAdminUser,
-            tooltip: 'Add Admin',
+            icon: const Icon(Icons.filter_alt),
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'all',
+                child: Text('All Users'),
+              ),
+              const PopupMenuItem(
+                value: 'user',
+                child: Text('Users'),
+              ),
+              const PopupMenuItem(
+                value: 'admin',
+                child: Text('Admins'),
+              ),
+            ],
           ),
         ],
       ),
@@ -256,44 +358,45 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
         itemCount: filteredUsers.length,
         itemBuilder: (context, index) {
           final user = filteredUsers[index];
-          return Card(
-            elevation: 4,
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            color: user.isBlocked ? Colors.grey[300] : Colors.white,
-            child: ListTile(
-              leading: CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(user.profileImage),
-              ),
-              title: Text(
-                user.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(user.role == 'admin' ? 'Admin' : 'User'),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (user.role == 'user')
-                    IconButton(
-                      icon: Icon(
-                        user.isBlocked ? Icons.lock_open : Icons.lock,
-                        color: user.isBlocked ? Colors.green : Colors.red,
-                      ),
-                      onPressed: () => _toggleBlockUser(user),
-                    ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deleteUser(user),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.info, color: Colors.blue),
-                    onPressed: () => _showUserDetails(context, user),
-                  ),
-                ],
-              ),
-            ),
+          return UserCard(
+            name: user.name,
+            lastname: user.lastname,
+            email: user.email,
+            profileImage: user.profileImage,
+            role: user.role,
+            isBlocked: user.isBlocked,
+            onToggleBlock: () => _toggleBlockUser(user),
+            onDelete: () => _deleteUser(user),
+            onViewDetails: () => _showUserDetails(context, user),
           );
         },
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Add User Button on the Left
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 32), // Adjust spacing from the screen edge
+            child: FloatingActionButton(
+              heroTag: 'statistics',
+              onPressed: _navigateToStatistics,
+              backgroundColor: Colors.blue,
+              child: const Icon(Icons.bar_chart),
+            ),
+          ),
+          // Statistics Button on the Right
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 32), // Adjust spacing from the screen edge
+            child: FloatingActionButton(
+              heroTag: 'add_user',
+              onPressed: () => _addUserDialog(context, 'admin'), // Or 'user'
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.person_add),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -86,7 +86,7 @@ class _AdminOrderManagementScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order Management'),
-        backgroundColor: const Color(0xFFC52127),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       ),
       body: ListView.builder(
         itemCount: orders.length,

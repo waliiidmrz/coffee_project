@@ -11,6 +11,7 @@ class ProductCard extends StatelessWidget {
     required this.product,
     required this.onAddToCart,
     required this.onViewDetails,
+    required price,
   }) : super(key: key);
 
   @override

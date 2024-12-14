@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../widgets/menu_item_card.dart';
-import '../screens/cart_screen.dart';
+import '../widgets/category_item.dart';
+import '../models/product.dart';
+import 'cart_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({Key? key}) : super(key: key);
@@ -11,15 +12,59 @@ class AdminDashboardScreen extends StatefulWidget {
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   final List<Map<String, dynamic>> _cart = [];
-  final Map<String, dynamic> _user = {
-    'name': 'John Doe',
-    'points': 150,
-    'giftCard': '\$25',
-    'profilePicture': 'https://via.placeholder.com/100',
-  };
+  int selectedCategory = 0;
 
-  double get _total =>
-      _cart.fold(0, (sum, item) => sum + (item['price'] * item['quantity']));
+  final List<String> categories = [
+    'Coffee',
+    'Iced',
+    'Juices',
+    'Breakfast',
+    'Sandwiches',
+    'Salads',
+    'Plates',
+    'Teas',
+    'Shakes',
+    'Sides'
+  ];
+
+  final List<Product> products = [
+    Product(
+      name: 'Espresso',
+      price: 2.99,
+      imageUrl: 'assets/images/express.jpeg',
+      isPromo: true,
+    ),
+    Product(
+      name: 'Cappuccino',
+      price: 3.49,
+      imageUrl: 'assets/images/cappucino.jpeg',
+      isPromo: false,
+    ),
+    Product(
+      name: 'Latte',
+      price: 3.99,
+      imageUrl: 'assets/images/latte.jpeg',
+      isPromo: true,
+    ),
+    Product(
+      name: 'Mocha',
+      price: 4.29,
+      imageUrl: 'assets/images/latte.webp',
+      isPromo: false,
+    ),
+    Product(
+      name: 'Macchiato',
+      price: 3.79,
+      imageUrl: 'assets/images/macchiato.jpg',
+      isPromo: true,
+    ),
+    Product(
+      name: 'Americano',
+      price: 2.89,
+      imageUrl: 'assets/images/americano.jpeg',
+      isPromo: false,
+    ),
+  ];
 
   void _addToCart(String name, double price) {
     setState(() {
@@ -36,30 +81,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     });
   }
 
-  void _updateCartQuantity(int index, int quantity) {
-    setState(() {
-      if (quantity > 0) {
-        _cart[index]['quantity'] = quantity;
-      } else {
-        _cart.removeAt(index);
-      }
-    });
-  }
-
-  void _removeItemFromCart(int index) {
-    setState(() {
-      _cart.removeAt(index);
-    });
-  }
-
-  void _passOrder() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Order has been placed successfully!')),
-    );
-
-    setState(() {
-      _cart.clear();
-    });
+  List<Product> getFilteredProducts(int categoryIndex) {
+    // Example: Filter logic can be based on the category
+    if (categoryIndex == 0) return products; // Show all products
+    return products; // For now, return all products as no specific filter logic is given
   }
 
   @override
@@ -67,24 +92,45 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
-        backgroundColor: const Color(0xFFC52127),
+        backgroundColor: Colors.white,
         actions: [
           Stack(
             children: [
               IconButton(
-                icon: const Icon(Icons.shopping_cart),
+                icon: const Icon(Icons.shopping_cart, color: Colors.black),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => CartScreen(
                         cartItems: _cart,
-                        updateCartQuantity: _updateCartQuantity,
-                        passOrder: _passOrder,
-                        removeItem: _removeItemFromCart,
+                        updateCartQuantity: (index, quantity) {
+                          setState(() {
+                            if (quantity > 0) {
+                              _cart[index]['quantity'] = quantity;
+                            } else {
+                              _cart.removeAt(index);
+                            }
+                          });
+                        },
+                        passOrder: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Order placed successfully!'),
+                            ),
+                          );
+                          setState(() {
+                            _cart.clear();
+                          });
+                        },
+                        removeItem: (index) {
+                          setState(() {
+                            _cart.removeAt(index);
+                          });
+                        },
                       ),
                     ),
-                  ).then((_) => setState(() {})); // Update cart count
+                  );
                 },
               ),
               if (_cart.isNotEmpty)
@@ -111,11 +157,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 16),
             const Text(
               'Welcome, Admin!',
               style: TextStyle(
@@ -125,89 +171,103 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    // User Profile Picture
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        _user['profilePicture'],
-                        height: 80,
-                        width: 80,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _user['name'],
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Points: ${_user['points']}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'Gift Card: ${_user['giftCard']}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            // Categories List
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 10.0),
+              child: SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return CategoryItem(
+                      index: index,
+                      title: categories[index],
+                      selectedCategory: selectedCategory,
+                      onClick: () {
+                        setState(() {
+                          selectedCategory = index;
+                        });
+                      },
+                    );
+                  },
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Menu Items',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            // Products Grid
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: getFilteredProducts(selectedCategory).length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.75,
               ),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.75,
-                ),
-                itemBuilder: (context, index) {
-                  final name = 'Menu Item ${index + 1}';
-                  final price = (index + 1) * 2.5;
-
-                  return MenuItemCard(
-                    name: name,
-                    price: price,
-                    onAddToCart: () => _addToCart(name, price),
-                  );
-                },
-              ),
+              itemBuilder: (context, index) {
+                final product = getFilteredProducts(selectedCategory)[index];
+                return GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${product.name} added to cart!'),
+                      ),
+                    );
+                    _addToCart(product.name, product.price);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              product.imageUrl,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            product.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8.0, right: 8.0, bottom: 8.0),
+                          child: Text(
+                            '\$${product.price.toStringAsFixed(2)}',
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
