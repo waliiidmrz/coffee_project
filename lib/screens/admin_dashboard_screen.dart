@@ -1,5 +1,5 @@
+import 'package:coffee_project/screens/ProductDetailsScreen.dart';
 import 'package:flutter/material.dart';
-import '../widgets/category_item.dart';
 import '../models/product.dart';
 import 'cart_screen.dart';
 
@@ -13,6 +13,13 @@ class AdminDashboardScreen extends StatefulWidget {
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   final List<Map<String, dynamic>> _cart = [];
   int selectedCategory = 0;
+
+  final Map<String, dynamic> _user = {
+    'name': 'John Doe',
+    'points': 150,
+    'giftCard': '\$25',
+    'profilePicture': 'https://via.placeholder.com/100',
+  };
 
   final List<String> categories = [
     'Coffee',
@@ -66,7 +73,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     ),
   ];
 
-  void _addToCart(String name, double price) {
+  void _addToCart(String name, double price, int quantity) {
     setState(() {
       final existingItem = _cart.firstWhere(
         (item) => item['name'] == name,
@@ -74,24 +81,23 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       );
 
       if (existingItem['name'] == name) {
-        existingItem['quantity'] += 1;
+        existingItem['quantity'] += quantity;
       } else {
-        _cart.add({'name': name, 'price': price, 'quantity': 1});
+        _cart.add({'name': name, 'price': price, 'quantity': quantity});
       }
     });
   }
 
   List<Product> getFilteredProducts(int categoryIndex) {
-    // Example: Filter logic can be based on the category
-    if (categoryIndex == 0) return products; // Show all products
-    return products; // For now, return all products as no specific filter logic is given
+    if (categoryIndex == 0) return products;
+    return products; // For now, returning all products
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+        title: const Text(''),
         backgroundColor: Colors.white,
         actions: [
           Stack(
@@ -113,21 +119,20 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             }
                           });
                         },
-                        passOrder: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Order placed successfully!'),
-                            ),
-                          );
-                          setState(() {
-                            _cart.clear();
-                          });
-                        },
                         removeItem: (index) {
                           setState(() {
                             _cart.removeAt(index);
                           });
                         },
+                        clearGlobalCart: () {
+                          setState(() {
+                            _cart
+                                .clear(); // Clear the global cart in the dashboard
+                          });
+                        },
+                        userName: _user['name'], // Pass user name
+                        userProfilePicture:
+                            _user['profilePicture'], // Pass profile picture
                       ),
                     ),
                   );
@@ -163,11 +168,67 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           children: [
             const SizedBox(height: 16),
             const Text(
-              'Welcome, Admin!',
+              'Welcome!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // User Card
+            Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        _user['profilePicture'],
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _user['name'],
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Points: ${_user['points']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Gift Card: ${_user['giftCard']}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -180,15 +241,31 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length,
                   itemBuilder: (context, index) {
-                    return CategoryItem(
-                      index: index,
-                      title: categories[index],
-                      selectedCategory: selectedCategory,
-                      onClick: () {
+                    return GestureDetector(
+                      onTap: () {
                         setState(() {
                           selectedCategory = index;
                         });
                       },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        margin: const EdgeInsets.only(right: 8.0),
+                        decoration: BoxDecoration(
+                          color: selectedCategory == index
+                              ? Colors.blue
+                              : Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Text(
+                          categories[index],
+                          style: TextStyle(
+                            color: selectedCategory == index
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -196,78 +273,101 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             ),
             const SizedBox(height: 16),
             // Products Grid
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: getFilteredProducts(selectedCategory).length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.75,
-              ),
-              itemBuilder: (context, index) {
-                final product = getFilteredProducts(selectedCategory)[index];
-                return GestureDetector(
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('${product.name} added to cart!'),
+            Padding(
+              padding:
+                  const EdgeInsets.all(16.0), // Add padding around the GridView
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: getFilteredProducts(selectedCategory).length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
+                  childAspectRatio: 0.75,
+                ),
+                itemBuilder: (context, index) {
+                  final product = getFilteredProducts(selectedCategory)[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductDetail(
+                            product: product,
+                            onAddToCart: _addToCart,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        color: Colors.white,
                       ),
-                    );
-                    _addToCart(product.name, product.price);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Product Image
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.asset(
+                                product.imageUrl,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
+                            ),
+                          ),
+                          // Product Name
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              product.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          // Product Price
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              '\$${product.price.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          // Add to Cart Button
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0, bottom: 8.0),
+                            child: ElevatedButton(
+                              onPressed: () => _addToCart(
+                                product.name,
+                                product.price,
+                                1,
+                              ),
+                              child: const Text('Add to Cart'),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              product.imageUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            product.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 8.0, right: 8.0, bottom: 8.0),
-                          child: Text(
-                            '\$${product.price.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),

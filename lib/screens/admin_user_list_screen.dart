@@ -1,6 +1,6 @@
-import 'package:coffee_project/widgets/UserCard.dart';
+import 'package:coffee_project/screens/StatisticsScreen.dart';
+import 'package:coffee_project/screens/UserDetailsScreen.dart';
 import 'package:flutter/material.dart';
-import 'StatisticsScreen.dart';
 
 class User {
   final String name;
@@ -49,19 +49,9 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
       email: 'jane.smith@example.com',
       phoneNumber: '+1 987 654 321',
       profileImage: 'https://via.placeholder.com/150',
-      role: 'user',
+      role: 'admin',
       isBlocked: true,
       birthDate: DateTime(1992, 8, 22),
-    ),
-    User(
-      name: 'Admin',
-      lastname: 'User',
-      email: 'admin@example.com',
-      phoneNumber: '+1 555 123 456',
-      profileImage: 'https://via.placeholder.com/150',
-      role: 'admin',
-      isBlocked: false,
-      birthDate: DateTime(1985, 3, 10),
     ),
   ];
 
@@ -77,6 +67,33 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
     setState(() {
       users.remove(user);
     });
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType inputType = TextInputType.text,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(fontSize: 14),
+        prefixIcon: Icon(icon, color: Colors.deepPurpleAccent),
+        filled: true,
+        fillColor: Colors.grey[200],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.deepPurpleAccent),
+        ),
+      ),
+    );
   }
 
   void _addUserDialog(BuildContext context, String role) {
@@ -246,33 +263,6 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType inputType = TextInputType.text,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: inputType,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(fontSize: 14),
-        prefixIcon: Icon(icon, color: Colors.deepPurpleAccent),
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.deepPurpleAccent),
-        ),
-      ),
-    );
-  }
-
   void _showUserDetails(BuildContext context, User user) {
     showDialog(
       context: context,
@@ -326,50 +316,75 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''),
-        backgroundColor: const Color.fromARGB(255, 251, 250, 250),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              setState(() {
-                filterRole = value;
-              });
-            },
-            icon: const Icon(Icons.filter_alt),
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'all',
-                child: Text('All Users'),
-              ),
-              const PopupMenuItem(
-                value: 'user',
-                child: Text('Users'),
-              ),
-              const PopupMenuItem(
-                value: 'admin',
-                child: Text('Admins'),
-              ),
-            ],
+        title: const Text(
+          'User Management',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+      ),
+      body: Column(
+        children: [
+          // Filter Buttons
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildFilterButton(
+                  label: 'All',
+                  isSelected: filterRole == 'all',
+                  onPressed: () {
+                    setState(() {
+                      filterRole = 'all';
+                    });
+                  },
+                ),
+                _buildFilterButton(
+                  label: 'Admins',
+                  isSelected: filterRole == 'admin',
+                  onPressed: () {
+                    setState(() {
+                      filterRole = 'admin';
+                    });
+                  },
+                ),
+                _buildFilterButton(
+                  label: 'Users',
+                  isSelected: filterRole == 'user',
+                  onPressed: () {
+                    setState(() {
+                      filterRole = 'user';
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          // User List
+          Expanded(
+            child: filteredUsers.isNotEmpty
+                ? ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: filteredUsers.length,
+                    itemBuilder: (context, index) {
+                      final user = filteredUsers[index];
+                      return _buildUserCard(user);
+                    },
+                  )
+                : const Center(
+                    child: Text(
+                      'No users found.',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
           ),
         ],
-      ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: filteredUsers.length,
-        itemBuilder: (context, index) {
-          final user = filteredUsers[index];
-          return UserCard(
-            name: user.name,
-            lastname: user.lastname,
-            email: user.email,
-            profileImage: user.profileImage,
-            role: user.role,
-            isBlocked: user.isBlocked,
-            onToggleBlock: () => _toggleBlockUser(user),
-            onDelete: () => _deleteUser(user),
-            onViewDetails: () => _showUserDetails(context, user),
-          );
-        },
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -397,6 +412,76 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFilterButton({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isSelected ? Colors.blue : Colors.grey[300],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: isSelected ? Colors.white : Colors.black,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserCard(User user) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserDetailsScreen(
+            user: user,
+            onDelete: () => _deleteUser(user),
+            onToggleBlock: () => _toggleBlockUser(user),
+          ),
+        ),
+      ),
+      child: Card(
+        elevation: 4,
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(user.profileImage),
+          ),
+          title: Text(
+            '${user.name} ${user.lastname}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Email: ${user.email}'),
+              Text('Role: ${user.role}'),
+              Text(
+                user.isBlocked ? 'Status: Blocked' : 'Status: Active',
+                style: TextStyle(
+                  color: user.isBlocked ? Colors.red : Colors.green,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

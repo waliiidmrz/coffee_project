@@ -1,3 +1,4 @@
+import 'package:coffee_project/widgets/custo_sidebar.dart';
 import 'package:coffee_project/widgets/custom_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,7 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Bisou'),
+      endDrawer: const CustomSidebar(),
       body: PersistentTabView(
         context,
         controller: _controller,

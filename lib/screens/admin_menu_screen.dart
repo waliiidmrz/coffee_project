@@ -1,9 +1,9 @@
-import 'package:coffee_project/models/menu.dart';
-import 'package:coffee_project/screens/StatisticsMenuScreen.dart';
-import 'package:coffee_project/widgets/MenuCard.dart';
-import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../models/menu.dart';
+import '../screens/StatisticsMenuScreen.dart';
 
 class AdminMenuScreen extends StatefulWidget {
   const AdminMenuScreen({Key? key}) : super(key: key);
@@ -22,6 +22,7 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
       price: 2.99,
       points: 10,
       createdAt: DateTime.now(),
+      image: 'assets/images/latte.jpeg',
     ),
     Menu(
       id: 2,
@@ -29,116 +30,24 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
       price: 3.49,
       points: 15,
       createdAt: DateTime.now(),
+      image: 'assets/images/macchiato.jpg',
     ),
   ];
 
-  Future<void> _selectImage(Function(String) onImageSelected) async {
-    try {
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        onImageSelected(pickedFile.path);
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error selecting image: $e')),
-      );
-    }
-  }
-
-  void _addMenuItem() {
-    final nameController = TextEditingController();
-    final priceController = TextEditingController();
-    final pointsController = TextEditingController();
-    String? image;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Add Menu Item'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                ),
-                TextField(
-                  controller: priceController,
-                  decoration: const InputDecoration(labelText: 'Price'),
-                  keyboardType: TextInputType.number,
-                ),
-                TextField(
-                  controller: pointsController,
-                  decoration: const InputDecoration(labelText: 'Points'),
-                  keyboardType: TextInputType.number,
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    final pickedFile =
-                        await _picker.pickImage(source: ImageSource.gallery);
-                    if (pickedFile != null) {
-                      setState(() {
-                        image = pickedFile.path;
-                      });
-                    }
-                  },
-                  child: const Text('Select Image'),
-                ),
-                if (image != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Image.file(
-                      File(image!),
-                      height: 100,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  menuItems.add(
-                    Menu(
-                      id: menuItems.length + 1,
-                      name: nameController.text,
-                      price: double.tryParse(priceController.text) ?? 0.0,
-                      points: int.tryParse(pointsController.text) ?? 0,
-                      createdAt: DateTime.now(),
-                      image: image,
-                    ),
-                  );
-                });
-                Navigator.pop(context);
-              },
-              child: const Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _editMenuItem(Menu menu) {
-    final nameController = TextEditingController(text: menu.name);
-    final priceController = TextEditingController(text: menu.price.toString());
+  void _addOrEditMenuItem({Menu? menu}) {
+    final nameController =
+        TextEditingController(text: menu != null ? menu.name : '');
+    final priceController =
+        TextEditingController(text: menu != null ? menu.price.toString() : '');
     final pointsController =
-        TextEditingController(text: menu.points.toString());
-    String? image = menu.image;
+        TextEditingController(text: menu != null ? menu.points.toString() : '');
+    String? imagePath = menu?.image;
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Menu Item'),
+          title: Text(menu != null ? 'Edit Menu Item' : 'Add Menu Item'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -157,23 +66,24 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
                   decoration: const InputDecoration(labelText: 'Points'),
                   keyboardType: TextInputType.number,
                 ),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
                     final pickedFile =
                         await _picker.pickImage(source: ImageSource.gallery);
                     if (pickedFile != null) {
                       setState(() {
-                        image = pickedFile.path;
+                        imagePath = pickedFile.path;
                       });
                     }
                   },
-                  child: const Text('Select Image'),
+                  child: const Text('Upload Image'),
                 ),
-                if (image != null)
+                if (imagePath != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Image.file(
-                      File(image!),
+                      File(imagePath!),
                       height: 100,
                       fit: BoxFit.cover,
                     ),
@@ -189,16 +99,31 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  menu.name = nameController.text;
-                  menu.price =
-                      double.tryParse(priceController.text) ?? menu.price;
-                  menu.points =
-                      int.tryParse(pointsController.text) ?? menu.points;
-                  menu.image = image;
+                  if (menu != null) {
+                    // Update existing menu
+                    menu.name = nameController.text;
+                    menu.price =
+                        double.tryParse(priceController.text) ?? menu.price;
+                    menu.points =
+                        int.tryParse(pointsController.text) ?? menu.points;
+                    menu.image = imagePath;
+                  } else {
+                    // Add new menu
+                    menuItems.add(
+                      Menu(
+                        id: menuItems.length + 1,
+                        name: nameController.text,
+                        price: double.tryParse(priceController.text) ?? 0.0,
+                        points: int.tryParse(pointsController.text) ?? 0,
+                        createdAt: DateTime.now(),
+                        image: imagePath,
+                      ),
+                    );
+                  }
                 });
                 Navigator.pop(context);
               },
-              child: const Text('Save'),
+              child: Text(menu != null ? 'Save' : 'Add'),
             ),
           ],
         );
@@ -228,19 +153,99 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: menuItems.length,
-        itemBuilder: (context, index) {
-          final item = menuItems[index];
-          return MenuCard(
-            name: item.name,
-            price: item.price,
-            points: item.points,
-            image: item.image,
-            onEdit: () => _editMenuItem(item),
-            onDelete: () => _deleteMenuItem(item),
-          );
-        },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.75,
+          ),
+          itemCount: menuItems.length,
+          itemBuilder: (context, index) {
+            final item = menuItems[index];
+            return Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Product Image
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(12),
+                      ),
+                      child:
+                          item.image != null && item.image!.contains('assets')
+                              ? Image.asset(
+                                  item.image!,
+                                  fit: BoxFit.cover,
+                                )
+                              : item.image != null
+                                  ? Image.file(
+                                      File(item.image!),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/images/placeholder.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '\$${item.price.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Points: ${item.points}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.spaceAround,
+                    buttonPadding: EdgeInsets.zero,
+                    children: [
+                      TextButton(
+                        onPressed: () => _addOrEditMenuItem(menu: item),
+                        child: const Text('Edit'),
+                      ),
+                      TextButton(
+                        onPressed: () => _deleteMenuItem(item),
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -258,7 +263,7 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
             padding: const EdgeInsets.only(right: 32),
             child: FloatingActionButton(
               heroTag: 'add_menu',
-              onPressed: _addMenuItem,
+              onPressed: () => _addOrEditMenuItem(),
               backgroundColor: Colors.green,
               child: const Icon(Icons.add),
             ),

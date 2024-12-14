@@ -1,252 +1,320 @@
-import 'package:coffee_project/models/product.dart';
-import 'package:coffee_project/screens/reservation-screen.dart';
 import 'package:flutter/material.dart';
+import '../models/product.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/coffee_size.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetail extends StatefulWidget {
   final Product product;
+  final Function(String, double, int) onAddToCart;
 
-  const ProductDetailsScreen({Key? key, required this.product})
-      : super(key: key);
+  const ProductDetail({
+    super.key,
+    required this.product,
+    required this.onAddToCart,
+  });
+
+  @override
+  State<ProductDetail> createState() => _ProductDetailState();
+}
+
+class _ProductDetailState extends State<ProductDetail> {
+  int selectedSize = 1;
+  int quantity = 1; // Default quantity is 1
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, color: Color(0xff2F2D2C)),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Container(
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: const Color.fromARGB(255, 243, 4, 4)
-                              .withOpacity(0.15), // Shadow color with opacity
-                          blurRadius: 8, // How blurry the shadow is
-                          offset: const Offset(2, 0), // Position of the shadow
-                        ),
-                      ]),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            product.imageUrl,
-                            width: 315,
-                            height: 250,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      left: 50,
-                      child: Text(
-                        product.name,
-                        style: const TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Demohirosinregular',
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              offset: Offset(10, 2),
-                              blurRadius: 4,
-                              color: Color.fromARGB(135, 4, 4, 4),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    ' ${product.price.toStringAsFixed(2)}\ DT',
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 35, 79, 48),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add to cart logic
-                      print('${product.name} added to cart!');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFC52127),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                    ),
-                    child: const Text(
-                      'Add to Cart',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            // Product Description
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'This is a premium quality product made with the finest ingredients. Perfect for those who enjoy the best in life. Enjoy the rich taste and aroma that will leave you wanting more!',
-                    style: TextStyle(fontSize: 16, height: 1.5),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Ingredients',
-                    style: TextStyle(
-                      fontFamily: 'Roadster',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    '- High-quality coffee beans\n'
-                    '- Premium milk\n'
-                    '- Natural flavors\n'
-                    '- Sugar (optional)',
-                    style: TextStyle(fontSize: 16, height: 1.5),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Reviews',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: const [
-                      ReviewCard(
-                        reviewer: 'John Doe',
-                        review:
-                            'Amazing taste and quality! Highly recommended.',
-                        rating: 5,
-                      ),
-                      ReviewCard(
-                        reviewer: 'Jane Smith',
-                        review: 'Great product! Worth every penny.',
-                        rating: 4,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ReservationScreen(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6A994E),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 50,
-                          vertical: 15,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: const Text(
-                        'Reserve a Table',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildProductImage(),
+            SizedBox(height: size.height * 0.02),
+            _buildProductInfo(),
+            SizedBox(height: size.height * 0.02),
+            _buildStaticDetails(size),
+            _buildQuantitySelector(),
+            _buildFooter(size),
           ],
         ),
       ),
     );
   }
-}
 
-class ReviewCard extends StatelessWidget {
-  final String reviewer;
-  final String review;
-  final int rating;
-
-  const ReviewCard({
-    Key? key,
-    required this.reviewer,
-    required this.review,
-    required this.rating,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              reviewer,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              review,
-              style: const TextStyle(fontSize: 14, height: 1.5),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: List.generate(
-                5,
-                (index) => Icon(
-                  index < rating ? Icons.star : Icons.star_border,
-                  color: Colors.amber,
-                  size: 16,
-                ),
-              ),
-            ),
-          ],
+  Widget _buildProductImage() {
+    return Container(
+      width: 315,
+      height: 226,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        image: DecorationImage(
+          image: AssetImage(widget.product.imageUrl),
+          fit: BoxFit.cover,
         ),
       ),
+    );
+  }
+
+  Widget _buildProductInfo() {
+    return SizedBox(
+      width: 320,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.product.name,
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w600,
+              color: Color(0xff2F2D2C),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "with Chocolate", // Static additional detail
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: Color(0xff9B9B9B),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStaticDetails(Size size) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.star, color: Color(0xffFBBE21)),
+                  const SizedBox(width: 5),
+                  Text(
+                    "4.9",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff2F2D2C),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    "(230)",
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xff9B9B9B),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  _iconFeature(Icons.local_drink),
+                  const SizedBox(width: 10),
+                  _iconFeature(Icons.bolt),
+                ],
+              ),
+            ],
+          ),
+          const Divider(color: Color(0xffEAEAEA)),
+          const SizedBox(height: 16),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Description',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "A cappuccino is an approximately 150 ml (5 oz) beverage, with 25 ml of espresso coffee and 85ml of fresh milk the foam...",
+                textAlign: TextAlign.justify,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xff9B9B9B),
+                  height: 1.64,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Size',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CoffeeSize(
+                title: 'S',
+                index: 0,
+                selectedSize: selectedSize,
+                onClick: () {
+                  setState(() {
+                    selectedSize = 0;
+                  });
+                },
+              ),
+              CoffeeSize(
+                title: 'M',
+                index: 1,
+                selectedSize: selectedSize,
+                onClick: () {
+                  setState(() {
+                    selectedSize = 1;
+                  });
+                },
+              ),
+              CoffeeSize(
+                title: 'L',
+                index: 2,
+                selectedSize: selectedSize,
+                onClick: () {
+                  setState(() {
+                    selectedSize = 2;
+                  });
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuantitySelector() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Quantity',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove_circle_outline),
+                onPressed: () {
+                  setState(() {
+                    if (quantity > 1) quantity--;
+                  });
+                },
+              ),
+              Text(
+                '$quantity',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add_circle_outline),
+                onPressed: () {
+                  setState(() {
+                    quantity++;
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter(Size size) {
+    return Container(
+      height: 121,
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 35),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Price', style: TextStyle(color: Colors.grey)),
+                Text(
+                  "\$${(widget.product.price * quantity).toStringAsFixed(2)}",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xffC67C4E),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 217,
+            height: 62,
+            child: CustomButton(
+              onPressed: () {
+                widget.onAddToCart(
+                  widget.product.name,
+                  widget.product.price,
+                  quantity,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${widget.product.name} added to cart!'),
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              title: 'Add to Cart',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _iconFeature(IconData icon) {
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: const Color(0xffF9F9F9),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Icon(icon, color: const Color(0xffC67C4E)),
     );
   }
 }

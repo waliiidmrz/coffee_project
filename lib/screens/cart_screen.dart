@@ -1,18 +1,25 @@
+import 'package:coffee_project/screens/Order_admin.dart';
 import 'package:flutter/material.dart';
 import '../widgets/cart_item_card.dart';
 
 class CartScreen extends StatefulWidget {
   final List<Map<String, dynamic>> cartItems;
   final void Function(int index, int quantity) updateCartQuantity;
-  final VoidCallback passOrder;
   final void Function(int index) removeItem;
+  final void Function()
+      clearGlobalCart; // Function to clear the cart in the parent
+
+  final String userName;
+  final String userProfilePicture;
 
   const CartScreen({
     Key? key,
     required this.cartItems,
     required this.updateCartQuantity,
-    required this.passOrder,
     required this.removeItem,
+    required this.userName,
+    required this.clearGlobalCart,
+    required this.userProfilePicture,
   }) : super(key: key);
 
   @override
@@ -20,10 +27,25 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  double get totalAmount => widget.cartItems.fold(
+  late List<Map<String, dynamic>> _cartItems;
+
+  @override
+  void initState() {
+    super.initState();
+    _cartItems = List.from(widget.cartItems);
+  }
+
+  double get totalAmount => _cartItems.fold(
         0,
         (sum, item) => sum + (item['price'] * item['quantity']),
       );
+
+  void _clearCart() {
+    setState(() {
+      _cartItems.clear();
+    });
+    widget.clearGlobalCart(); // Clear the global cart
+  }
 
   void _updateQuantity(int index, int quantity) {
     widget.updateCartQuantity(index, quantity);
@@ -34,62 +56,116 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cart'),
-        backgroundColor: const Color(0xFFC52127),
+        title: const Text(
+          'Your Cart',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.cartItems.length,
-                itemBuilder: (context, index) {
-                  final item = widget.cartItems[index];
-                  return Dismissible(
-                    key: Key(item['name']),
-                    direction: DismissDirection.endToStart,
-                    onDismissed: (direction) {
-                      widget.removeItem(index);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${item['name']} removed from cart'),
-                        ),
-                      );
-                      setState(() {});
-                    },
-                    background: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      color: Colors.red,
-                      child: const Icon(Icons.delete, color: Colors.white),
+            // User Info Section
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.only(bottom: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(widget.userProfilePicture),
                     ),
-                    child: CartItemCard(
-                      item: item,
-                      onAdd: () => _updateQuantity(index, item['quantity'] + 1),
-                      onRemove: () =>
-                          _updateQuantity(index, item['quantity'] - 1),
+                    const SizedBox(width: 16),
+                    Text(
+                      widget.userName,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
             ),
+            // Cart List
+            Expanded(
+              child: _cartItems.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: _cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _cartItems[index];
+                        return Dismissible(
+                          key: Key(item['name']),
+                          direction: DismissDirection.endToStart,
+                          onDismissed: (direction) {
+                            widget.removeItem(index);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('${item['name']} removed from cart'),
+                              ),
+                            );
+                            setState(() {});
+                          },
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            color: Colors.red,
+                            child:
+                                const Icon(Icons.delete, color: Colors.white),
+                          ),
+                          child: CartItemCard(
+                            item: item,
+                            onAdd: () =>
+                                _updateQuantity(index, item['quantity'] + 1),
+                            onRemove: () =>
+                                _updateQuantity(index, item['quantity'] - 1),
+                          ),
+                        );
+                      },
+                    )
+                  : const Center(
+                      child: Text(
+                        'Your cart is empty!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+            ),
             const SizedBox(height: 16),
+            // Total Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   'Total:',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   '\$${totalAmount.toStringAsFixed(2)}',
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFFC52127),
                   ),
@@ -97,20 +173,38 @@ class _CartScreenState extends State<CartScreen> {
               ],
             ),
             const SizedBox(height: 16),
+            // Place Order Button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: widget.passOrder,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OrderSummaryScreen(
+                        userName: widget.userName,
+                        userProfilePicture: widget.userProfilePicture,
+                        cartItems: _cartItems,
+                        totalAmount: totalAmount,
+                        clearCart: _clearCart,
+                      ),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFC52127),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: const Text(
                   'Place Order',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
