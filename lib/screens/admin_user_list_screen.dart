@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:BISOU/screens/StatisticsScreen.dart';
 import 'package:BISOU/screens/UserDetailsScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class User {
   final String name;
@@ -32,6 +35,7 @@ class AdminUserListScreen extends StatefulWidget {
 }
 
 class _AdminUserListScreenState extends State<AdminUserListScreen> {
+  final ImagePicker _picker = ImagePicker();
   final List<User> users = [
     User(
       name: 'John',
@@ -81,7 +85,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(fontSize: 14),
-        prefixIcon: Icon(icon, color: Colors.deepPurpleAccent),
+        prefixIcon: Icon(icon, color: Colors.red),
         filled: true,
         fillColor: Colors.grey[200],
         border: OutlineInputBorder(
@@ -90,7 +94,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.deepPurpleAccent),
+          borderSide: const BorderSide(color: Colors.redAccent),
         ),
       ),
     );
@@ -102,6 +106,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
     final emailController = TextEditingController();
     final phoneController = TextEditingController();
     DateTime? birthDate;
+    String? imagePath;
 
     showDialog(
       context: context,
@@ -116,7 +121,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
               CircleAvatar(
                 radius: 20,
                 backgroundColor:
-                    role == 'admin' ? Colors.blueAccent : Colors.orangeAccent,
+                    role == 'admin' ? Colors.red : Colors.orangeAccent,
                 child: Icon(
                   role == 'admin'
                       ? Icons.admin_panel_settings
@@ -166,11 +171,11 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent,
+                    backgroundColor: const Color.fromARGB(255, 244, 237, 237),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                   ),
                   onPressed: () async {
                     final selectedDate = await showDatePicker(
@@ -183,14 +188,36 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
                       birthDate = selectedDate;
                     }
                   },
-                  icon: const Icon(Icons.calendar_today, color: Colors.white),
+                  icon: const Icon(Icons.calendar_today, color: Colors.red),
                   label: Text(
                     birthDate == null
                         ? 'Select Birthdate'
                         : 'Selected: ${birthDate!.toLocal().toString().split(' ')[0]}',
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    final pickedFile =
+                        await _picker.pickImage(source: ImageSource.gallery);
+                    if (pickedFile != null) {
+                      setState(() {
+                        imagePath = pickedFile.path;
+                      });
+                    }
+                  },
+                  child: const Text('Upload Image'),
+                ),
+                if (imagePath != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Image.file(
+                      File(imagePath!),
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -207,7 +234,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
+                backgroundColor: const Color.fromARGB(255, 195, 63, 53),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -407,7 +434,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
             child: FloatingActionButton(
               heroTag: 'add_user',
               onPressed: () => _addUserDialog(context, 'admin'), // Or 'user'
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.red,
               child: const Icon(Icons.person_add),
             ),
           ),
@@ -424,7 +451,7 @@ class _AdminUserListScreenState extends State<AdminUserListScreen> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.blue : Colors.grey[300],
+        backgroundColor: isSelected ? Colors.red : Colors.grey[300],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),

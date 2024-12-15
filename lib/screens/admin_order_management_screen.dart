@@ -9,7 +9,7 @@ class Order {
   final DateTime orderDate;
   final String user;
   final String menu;
-  final List<Map<String, dynamic>> products; // Products list
+  final List<Map<String, dynamic>> products;
   bool isConfirmed;
 
   Order({
@@ -48,7 +48,7 @@ class _AdminOrderManagementScreenState
         {'name': 'Cappuccino', 'quantity': 1, 'price': 4.99},
         {'name': 'Latte', 'quantity': 2, 'price': 3.49},
       ],
-      isConfirmed: true, // Confirmed order
+      isConfirmed: true,
     ),
     Order(
       localization: 'Uptown Bistro',
@@ -62,24 +62,11 @@ class _AdminOrderManagementScreenState
         {'name': 'Espresso', 'quantity': 1, 'price': 2.99},
         {'name': 'Americano', 'quantity': 2, 'price': 3.25},
       ],
-      isConfirmed: false, // Pending order
-    ),
-    Order(
-      localization: 'City Center Diner',
-      latitude: 34567,
-      longitude: 76543,
-      amount: 42.99,
-      orderDate: DateTime.now().subtract(const Duration(days: 2)),
-      user: 'Alice Brown',
-      menu: 'Mocha',
-      products: [
-        {'name': 'Mocha', 'quantity': 2, 'price': 5.99},
-      ],
-      isConfirmed: false, // Pending order
+      isConfirmed: false,
     ),
   ];
 
-  bool showConfirmed = false; // Filter state
+  bool showConfirmed = false;
 
   void _navigateToOrderConfirmation(Order order) async {
     final result = await Navigator.push(
@@ -93,20 +80,12 @@ class _AdminOrderManagementScreenState
       setState(() {
         order.isConfirmed = true;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Order for ${order.user} confirmed!'),
-        ),
-      );
+      _showSnackBar('Order for ${order.user} confirmed!');
     } else if (result == false) {
       setState(() {
         orders.remove(order);
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Order for ${order.user} removed!'),
-        ),
-      );
+      _showSnackBar('Order for ${order.user} removed!');
     }
   }
 
@@ -114,8 +93,39 @@ class _AdminOrderManagementScreenState
     setState(() {
       orders.remove(order);
     });
+    _showSnackBar('Order for ${order.user} deleted!');
+  }
+
+  void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Order for ${order.user} deleted!')),
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  Widget _buildFilterButton({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onPressed,
+  }) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor:
+              isSelected ? const Color(0xFFC52127) : Colors.grey[300],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 
@@ -140,38 +150,24 @@ class _AdminOrderManagementScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                _buildFilterButton(
+                  label: 'Pending Orders',
+                  isSelected: !showConfirmed,
                   onPressed: () {
                     setState(() {
-                      showConfirmed = false; // Show pending orders
+                      showConfirmed = false;
                     });
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: !showConfirmed
-                        ? const Color.fromARGB(255, 60, 128, 224)
-                        : const Color.fromARGB(255, 202, 201, 201),
-                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                  ),
-                  child: const Text('Pending Orders'),
                 ),
                 const SizedBox(width: 16),
-                ElevatedButton(
+                _buildFilterButton(
+                  label: 'Confirmed Orders',
+                  isSelected: showConfirmed,
                   onPressed: () {
                     setState(() {
-                      showConfirmed = true; // Show confirmed orders
+                      showConfirmed = true;
                     });
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: showConfirmed
-                        ? const Color.fromARGB(255, 60, 128, 224)
-                        : const Color.fromARGB(255, 202, 201, 201),
-                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                  ),
-                  child: const Text('Confirmed Orders'),
                 ),
               ],
             ),
@@ -202,7 +198,7 @@ class _AdminOrderManagementScreenState
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Amount: \$${order.amount.toStringAsFixed(2)} | Date: ${order.orderDate.toLocal().toString().split(' ')[0]}',
+                                'Amount: ${order.amount.toStringAsFixed(2)}DT | Date: ${order.orderDate.toLocal().toString().split(' ')[0]}',
                               ),
                               const SizedBox(height: 4),
                               Text(

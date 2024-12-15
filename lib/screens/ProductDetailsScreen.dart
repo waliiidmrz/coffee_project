@@ -271,11 +271,11 @@ class _ProductDetailState extends State<ProductDetail> {
               children: [
                 const Text('Price', style: TextStyle(color: Colors.grey)),
                 Text(
-                  "\$${(widget.product.price! * quantity).toStringAsFixed(2)}",
+                  "${(widget.product.price! * quantity).toStringAsFixed(2)}DT",
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xffC67C4E),
+                    color: Colors.red,
                   ),
                 ),
               ],
@@ -299,6 +299,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 Navigator.pop(context);
               },
               title: 'Add to Cart',
+              colors: Colors.red,
             ),
           ),
         ],

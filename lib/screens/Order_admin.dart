@@ -104,7 +104,7 @@ class OrderSummaryScreen extends StatelessWidget {
                         ),
                       ),
                       trailing: Text(
-                        '\$${(item['price'] * item['quantity']).toStringAsFixed(2)}',
+                        '${(item['price'] * item['quantity']).toStringAsFixed(2)}DT',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -128,7 +128,7 @@ class OrderSummaryScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '\$${totalAmount.toStringAsFixed(2)}',
+                  '${totalAmount.toStringAsFixed(2)}DT',
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,

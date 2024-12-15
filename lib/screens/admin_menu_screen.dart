@@ -191,7 +191,7 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
                                       fit: BoxFit.cover,
                                     )
                                   : Image.asset(
-                                      'assets/images/placeholder.jpg',
+                                      'assets/images/espresso.jpg',
                                       fit: BoxFit.cover,
                                     ),
                     ),
@@ -210,7 +210,7 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '\$${item.price.toStringAsFixed(2)}',
+                          '${item.price.toStringAsFixed(2)}DT',
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.grey,
@@ -264,7 +264,7 @@ class _AdminMenuScreenState extends State<AdminMenuScreen> {
             child: FloatingActionButton(
               heroTag: 'add_menu',
               onPressed: () => _addOrEditMenuItem(),
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.red,
               child: const Icon(Icons.add),
             ),
           ),
