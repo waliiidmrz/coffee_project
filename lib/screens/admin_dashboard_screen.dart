@@ -1,6 +1,7 @@
+import 'package:coffee_project/screens/ProductDetailsScreen.dart';
 import 'package:flutter/material.dart';
-import '../widgets/menu_item_card.dart';
-import '../screens/cart_screen.dart';
+import '../models/product.dart';
+import 'cart_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({Key? key}) : super(key: key);
@@ -11,6 +12,8 @@ class AdminDashboardScreen extends StatefulWidget {
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   final List<Map<String, dynamic>> _cart = [];
+  int selectedCategory = 0;
+
   final Map<String, dynamic> _user = {
     'name': 'John Doe',
     'points': 150,
@@ -18,10 +21,59 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     'profilePicture': 'https://via.placeholder.com/100',
   };
 
-  double get _total =>
-      _cart.fold(0, (sum, item) => sum + (item['price'] * item['quantity']));
+  final List<String> categories = [
+    'Coffee',
+    'Iced',
+    'Juices',
+    'Breakfast',
+    'Sandwiches',
+    'Salads',
+    'Plates',
+    'Teas',
+    'Shakes',
+    'Sides'
+  ];
 
-  void _addToCart(String name, double price) {
+  final List<Product> products = [
+    Product(
+      name: 'Espresso',
+      price: 2.99,
+      imageUrl: 'assets/images/express.jpeg',
+      isPromo: true,
+    ),
+    Product(
+      name: 'Cappuccino',
+      price: 3.49,
+      imageUrl: 'assets/images/cappucino.jpeg',
+      isPromo: false,
+    ),
+    Product(
+      name: 'Latte',
+      price: 3.99,
+      imageUrl: 'assets/images/latte.jpeg',
+      isPromo: true,
+    ),
+    Product(
+      name: 'Mocha',
+      price: 4.29,
+      imageUrl: 'assets/images/latte.webp',
+      isPromo: false,
+    ),
+    Product(
+      name: 'Macchiato',
+      price: 3.79,
+      imageUrl: 'assets/images/macchiato.jpg',
+      isPromo: true,
+    ),
+    Product(
+      name: 'Americano',
+      price: 2.89,
+      imageUrl: 'assets/images/americano.jpeg',
+      isPromo: false,
+    ),
+  ];
+
+  void _addToCart(String name, double price, int quantity) {
     setState(() {
       final existingItem = _cart.firstWhere(
         (item) => item['name'] == name,
@@ -29,62 +81,61 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       );
 
       if (existingItem['name'] == name) {
-        existingItem['quantity'] += 1;
+        existingItem['quantity'] += quantity;
       } else {
-        _cart.add({'name': name, 'price': price, 'quantity': 1});
+        _cart.add({'name': name, 'price': price, 'quantity': quantity});
       }
     });
   }
 
-  void _updateCartQuantity(int index, int quantity) {
-    setState(() {
-      if (quantity > 0) {
-        _cart[index]['quantity'] = quantity;
-      } else {
-        _cart.removeAt(index);
-      }
-    });
-  }
-
-  void _removeItemFromCart(int index) {
-    setState(() {
-      _cart.removeAt(index);
-    });
-  }
-
-  void _passOrder() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Order has been placed successfully!')),
-    );
-
-    setState(() {
-      _cart.clear();
-    });
+  List<Product> getFilteredProducts(int categoryIndex) {
+    if (categoryIndex == 0) return products;
+    return products; // For now, returning all products
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard'),
-        backgroundColor: const Color(0xFFC52127),
+        title: const Text(''),
+        backgroundColor: Colors.white,
         actions: [
           Stack(
             children: [
               IconButton(
-                icon: const Icon(Icons.shopping_cart),
+                icon: const Icon(Icons.shopping_cart, color: Colors.black),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => CartScreen(
                         cartItems: _cart,
-                        updateCartQuantity: _updateCartQuantity,
-                        passOrder: _passOrder,
-                        removeItem: _removeItemFromCart,
+                        updateCartQuantity: (index, quantity) {
+                          setState(() {
+                            if (quantity > 0) {
+                              _cart[index]['quantity'] = quantity;
+                            } else {
+                              _cart.removeAt(index);
+                            }
+                          });
+                        },
+                        removeItem: (index) {
+                          setState(() {
+                            _cart.removeAt(index);
+                          });
+                        },
+                        clearGlobalCart: () {
+                          setState(() {
+                            _cart
+                                .clear(); // Clear the global cart in the dashboard
+                          });
+                        },
+                        userName: _user['name'], // Pass user name
+                        userProfilePicture:
+                            _user['profilePicture'], // Pass profile picture
                       ),
                     ),
-                  ).then((_) => setState(() {})); // Update cart count
+                  );
                 },
               ),
               if (_cart.isNotEmpty)
@@ -111,13 +162,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 16),
             const Text(
-              'Welcome, Admin!',
+              'Welcome!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -125,7 +176,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
             ),
             const SizedBox(height: 16),
+            // User Card
             Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16.0),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -134,7 +187,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
-                    // User Profile Picture
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
@@ -180,31 +232,139 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Menu Items',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            // Categories List
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 10.0),
+              child: SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = index;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        margin: const EdgeInsets.only(right: 8.0),
+                        decoration: BoxDecoration(
+                          color: selectedCategory == index
+                              ? Colors.blue
+                              : Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Text(
+                          categories[index],
+                          style: TextStyle(
+                            color: selectedCategory == index
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-            const SizedBox(height: 8),
-            Expanded(
+            const SizedBox(height: 16),
+            // Products Grid
+            Padding(
+              padding:
+                  const EdgeInsets.all(16.0), // Add padding around the GridView
               child: GridView.builder(
-                itemCount: 10,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: getFilteredProducts(selectedCategory).length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
                   childAspectRatio: 0.75,
                 ),
                 itemBuilder: (context, index) {
-                  final name = 'Menu Item ${index + 1}';
-                  final price = (index + 1) * 2.5;
-
-                  return MenuItemCard(
-                    name: name,
-                    price: price,
-                    onAddToCart: () => _addToCart(name, price),
+                  final product = getFilteredProducts(selectedCategory)[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ProductDetail(
+                            product: product,
+                            onAddToCart: _addToCart,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        color: Colors.white,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Product Image
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.asset(
+                                product.imageUrl!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                              ),
+                            ),
+                          ),
+                          // Product Name
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              product.name!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          // Product Price
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              '\$${product.price!.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          // Add to Cart Button
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0, bottom: 8.0),
+                            child: ElevatedButton(
+                              onPressed: () => _addToCart(
+                                product.name!,
+                                product.price!,
+                                1,
+                              ),
+                              child: const Text('Add to Cart'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               ),
