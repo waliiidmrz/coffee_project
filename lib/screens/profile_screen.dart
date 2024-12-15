@@ -1,4 +1,6 @@
 import 'package:BISOU/screens/edit_profile_screen.dart';
+import 'package:BISOU/screens/favorites_screen.dart';
+import 'package:BISOU/screens/order_history_screen.dart';
 import 'package:BISOU/screens/rewards_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -426,9 +428,35 @@ class ProfileScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        buildStatItem('Orders', '150', Icons.shopping_bag),
-                        buildStatItem('Favorites', '25', Icons.favorite),
-                        buildStatItem('Reviews', '40', Icons.star),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OrderHistoryScreen()),
+                            );
+                          },
+                          child: buildStatItem(
+                              'Orders', '150', Icons.shopping_bag),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FavoritesScreen()),
+                            );
+                          },
+                          child:
+                              buildStatItem('Favorites', '25', Icons.favorite),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            // Handle Reviews navigation
+                            print('Navigating to Reviews');
+                          },
+                          child: buildStatItem('Reviews', '40', Icons.star),
+                        ),
                       ],
                     ),
                   ),

@@ -1,90 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// This class handles the Page to edit the Phone Section of the User Profile.
-class EditPhoneFormPage extends StatefulWidget {
-  const EditPhoneFormPage({Key? key}) : super(key: key);
-  @override
-  EditPhoneFormPageState createState() {
-    return EditPhoneFormPageState();
-  }
-}
-
-class EditPhoneFormPageState extends State<EditPhoneFormPage> {
-  final _formKey = GlobalKey<FormState>();
-  final phoneController = TextEditingController();
-
-  @override
-  void dispose() {
-    phoneController.dispose();
-    super.dispose();
-  }
-
-  void updateUserValue(String phone) {
-    String formattedPhoneNumber = "(" +
-        phone.substring(0, 3) +
-        ") " +
-        phone.substring(3, 6) +
-        "-" +
-        phone.substring(6, phone.length);
-  }
-
+class EditPhoneFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final TextEditingController phoneController = TextEditingController();
+
     return Scaffold(
-        body: Form(
-      key: _formKey,
-      child: Column(
+      appBar: AppBar(
+        title: const Text("Edit Phone Number"),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Color(0xFF087F23)), // Green color
+        titleTextStyle: GoogleFonts.sora(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: const Color.fromARGB(255, 0, 0, 0),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-                width: 320,
-                child: const Text(
-                  "What's Your Phone Number?",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                )),
-            Padding(
-                padding: EdgeInsets.only(top: 40),
-                child: SizedBox(
-                    height: 100,
-                    width: 320,
-                    child: TextFormField(
-                      // Handles Form Validation
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your phone number';
-                        } else if (value.length < 10) {
-                          return 'Please enter a VALID phone number';
-                        }
-                        return null;
-                      },
-                      controller: phoneController,
-                      decoration: const InputDecoration(
-                        labelText: 'Your Phone Number',
-                      ),
-                    ))),
-            Padding(
-                padding: EdgeInsets.only(top: 150),
-                child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: 320,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Validate returns true if the form is valid, or false otherwise.
-                          if (_formKey.currentState!.validate()) {
-                            updateUserValue(phoneController.text);
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: const Text(
-                          'Update',
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ),
-                    )))
-          ]),
-    ));
+          children: [
+            // Header Icon with Green Theme
+            Container(
+              height: 120,
+              width: 120,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF66BB6A), Color(0xFF087F23)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.greenAccent.withOpacity(0.4),
+                    blurRadius: 30,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: const Icon(Icons.phone, size: 60, color: Colors.white),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "Update Your Phone Number",
+              style: GoogleFonts.sora(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF2F2D2C),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Keep your phone number up to date for security and communication.",
+              style: GoogleFonts.sora(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 40),
+
+            // Input Field for Phone Number
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                labelText: "New Phone Number",
+                labelStyle: GoogleFonts.sora(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                ),
+                prefixIcon: const Icon(Icons.phone, color: Color(0xFF087F23)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                filled: true,
+                fillColor: const Color(0xFFF8F9FA),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF087F23),
+                    width: 2,
+                  ),
+                ),
+              ),
+              cursorColor: const Color(0xFF087F23),
+            ),
+            const SizedBox(height: 40),
+
+            // Save Changes Button
+            ElevatedButton.icon(
+              onPressed: () {
+                // Handle Save
+              },
+              icon: const Icon(Icons.save, color: Colors.white),
+              label: const Text(
+                "Save Changes",
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF087F23), // Green button
+                padding:
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: 10,
+                shadowColor: Colors.greenAccent.withOpacity(0.3),
+                textStyle: GoogleFonts.sora(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

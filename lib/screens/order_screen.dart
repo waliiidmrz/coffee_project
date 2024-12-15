@@ -1,11 +1,11 @@
-import 'package:BISOU/widgets/animated_discount.dart';
-import 'package:BISOU/widgets/custom_button.dart';
+import 'package:BISOU/screens/home_screen.dart';
 import 'package:BISOU/widgets/gold_membership_container.dart';
+import 'package:BISOU/widgets/pay_button.dart';
+import 'package:BISOU/widgets/payment_options.dart';
 import 'package:BISOU/widgets/payment_summary_card.dart';
 import 'package:BISOU/widgets/type_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:wheel_picker/wheel_picker.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -50,21 +50,38 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF9F9F9),
       appBar: AppBar(
+        elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HomeScreen(),
+            ),
+          ),
           icon: const Icon(
             Icons.chevron_left,
             color: Color(0xff2F2D2C),
           ),
         ),
+        title: Text(
+          "Your Order",
+          style: GoogleFonts.sora(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xff2F2D2C),
+          ),
+        ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Order Type Toggle
               TypeToggle(
                 selectedTab: selectedType,
                 onTabChanged: (int newType) {
@@ -73,129 +90,41 @@ class _OrderScreenState extends State<OrderScreen> {
                   });
                 },
               ),
-              SizedBox(
-                height: size.height * 0.040,
-              ),
+              SizedBox(height: size.height * 0.03),
+
+              // Order Details Section
               buildOrderDetailsContainer(),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+
+              // Coffee Items
               buildCoffeeList(),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+
+              // Separator Line
               Container(
-                height: 4,
-                decoration: const BoxDecoration(color: Color(0xffF4F4F4)),
+                height: 2,
+                width: size.width * 0.9,
+                color: const Color(0xFFEAEAEA),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+
+              // Gold Membership Section
               AnimatedGoldMembershipContainer(),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+
+              // Payment Summary
               PaymentSummaryCard(),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: 376,
-                height: 161,
-                padding: const EdgeInsets.only(
-                  top: 25,
-                ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: 315,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Iconsax.moneys5,
-                                color: Color.fromARGB(255, 7, 132, 70),
-                                weight: 24,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                width: 112,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffF6F6F6),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 51,
-                                      height: 24,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFC52127),
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Text(
-                                        "Cash",
-                                        style: GoogleFonts.sora(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.white,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "\$ 5.53",
-                                      style: GoogleFonts.sora(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Color(0xff808080),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: const Icon(
-                              Iconsax.more,
-                              size: 19.2,
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    SizedBox(
-                      width: 250,
-                      height: 62,
-                      child: CustomButton(title: 'Order', onPressed: () => {}),
-                    )
-                  ],
+              const SizedBox(height: 20),
+
+              // Payment Options
+              PaymentSelector(),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: SizedBox(
+                  width: 200,
+                  height: 40,
+                  child: PayButton(title: 'Order', onPressed: () => {}),
                 ),
               )
             ],

@@ -34,7 +34,7 @@ class _CoffeeSizeState extends State<CoffeeSize> {
               : Color(0xffffff),
           border: Border.all(
             color: widget.index == widget.selectedSize
-                ? Color(0xffC67C4E)
+                ? Color.fromARGB(255, 0, 0, 0)
                 : Color(0xffDEDEDE),
           ),
           borderRadius: BorderRadius.circular(12),
@@ -45,7 +45,7 @@ class _CoffeeSizeState extends State<CoffeeSize> {
               fontSize: 14,
               fontWeight: FontWeight.w400,
               color: widget.index == widget.selectedSize
-                  ? Color(0xffC67C4E)
+                  ? Color.fromARGB(255, 250, 0, 0)
                   : Colors.black),
         ),
       ),

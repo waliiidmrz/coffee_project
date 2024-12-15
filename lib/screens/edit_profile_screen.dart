@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'package:BISOU/data/mockuser.dart';
 import 'package:BISOU/models/user.dart';
+import 'package:BISOU/screens/edit_email.dart';
+import 'package:BISOU/screens/edit_name.dart';
 import 'package:BISOU/screens/edit_phone.dart';
+import 'package:BISOU/screens/edit_photo.dart';
 import 'package:BISOU/widgets/display_image.dart';
 import 'package:flutter/material.dart';
 
@@ -51,23 +54,11 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           const SizedBox(height: 20),
-          Center(
-            child: InkWell(
-              onTap: () {
-                //navigateSecondPage(EditImagePage());
-              },
-              child: DisplayImage(
-                imagePath: 'assets/images/userimage.jpeg',
-                onPressed: () {},
-              ),
-            ),
-          ),
+          EditProfilePhoto(),
           const SizedBox(height: 20),
-          buildUserInfoDisplay(
-              user.firstname!, 'Name', const EditPhoneFormPage()),
-          buildUserInfoDisplay(
-              user.phoneNumber!, 'Phone', const EditPhoneFormPage()),
-          buildUserInfoDisplay(user.email, 'Email', const EditPhoneFormPage()),
+          buildUserInfoDisplay(user.firstname!, 'Name', EditNameFormPage()),
+          buildUserInfoDisplay(user.phoneNumber!, 'Phone', EditPhoneFormPage()),
+          buildUserInfoDisplay(user.email, 'Email', EditEmailFormPage()),
           const SizedBox(height: 20),
           buildAboutSection(user),
         ],
@@ -166,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               IconButton(
                 onPressed: () {
-                  navigateSecondPage(const EditPhoneFormPage());
+                  navigateSecondPage(EditPhoneFormPage());
                 },
                 icon: const Icon(
                   Icons.edit,

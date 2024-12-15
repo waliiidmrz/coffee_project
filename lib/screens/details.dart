@@ -130,9 +130,9 @@ class _DetailState extends State<Detail> {
               ),
               Row(
                 children: [
-                  _iconFeature(Icons.local_drink, size),
+                  _iconFeature('assets/images/cup_icon.png', Size(5, 5)),
                   const SizedBox(width: 10),
-                  _iconFeature(Icons.bolt, size),
+                  _iconFeature('assets/images/goblet_icon.png', size),
                 ],
               ),
             ],
@@ -237,7 +237,7 @@ class _DetailState extends State<Detail> {
                   style: GoogleFonts.sora(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xffC67C4E),
+                    color: const Color.fromARGB(255, 89, 83, 79),
                   ),
                 ),
               ],
@@ -261,15 +261,14 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget _iconFeature(IconData icon, Size size) {
+  Widget _iconFeature(String icon, Size size) {
     return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        color: const Color(0xffF9F9F9),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Icon(icon, color: const Color(0xffC67C4E)),
-    );
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 240, 237, 237).withOpacity(0.3),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Image(image: AssetImage(icon)));
   }
 }
