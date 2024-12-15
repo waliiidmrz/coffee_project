@@ -21,12 +21,12 @@ class _CustomButtonState extends State<CustomButton> {
     return ElevatedButton(
       onPressed: () => widget.onPressed(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xffC67C4E),
+        backgroundColor: const Color(0xFFC52127),
         foregroundColor: Colors.white,
-        elevation: 0,
+        elevation: 10,
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(80),
         ),
       ),
       child: Text(

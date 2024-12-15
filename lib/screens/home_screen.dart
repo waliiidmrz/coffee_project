@@ -1,4 +1,4 @@
-import 'package:coffee_project/widgets/product_item.dart';
+import 'package:BISOU/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import '../widgets/category_item.dart';
 import '../models/product.dart';

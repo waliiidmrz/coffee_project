@@ -1,7 +1,8 @@
-import 'package:coffee_project/widgets/animated_discount.dart';
-import 'package:coffee_project/widgets/custom_button.dart';
-import 'package:coffee_project/widgets/gold_membership_container.dart';
-import 'package:coffee_project/widgets/type_toggle.dart';
+import 'package:BISOU/widgets/animated_discount.dart';
+import 'package:BISOU/widgets/custom_button.dart';
+import 'package:BISOU/widgets/gold_membership_container.dart';
+import 'package:BISOU/widgets/payment_summary_card.dart';
+import 'package:BISOU/widgets/type_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -94,87 +95,9 @@ class _OrderScreenState extends State<OrderScreen> {
               const SizedBox(
                 height: 20,
               ),
-              SizedBox(
-                width: 315,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Payment Summary",
-                      style: GoogleFonts.sora(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 13,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Price",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          "\$ 4.53",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Discount",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const AnimatedDiscount(targetValue: 2.56),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 7,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(Icons.attach_money, color: Colors.green),
-                            const SizedBox(width: 5),
-                            Text(
-                              "Total Payment",
-                              style: GoogleFonts.sora(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "\$2.53",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              PaymentSummaryCard(),
+              const SizedBox(
+                height: 20,
               ),
               Container(
                 width: 376,
@@ -199,8 +122,8 @@ class _OrderScreenState extends State<OrderScreen> {
                           Row(
                             children: [
                               const Icon(
-                                Iconsax.moneys,
-                                color: Color(0xFFC52127),
+                                Iconsax.moneys5,
+                                color: Color.fromARGB(255, 7, 132, 70),
                                 weight: 24,
                               ),
                               const SizedBox(
@@ -220,7 +143,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                       height: 24,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                        color: Color(0xFFC52127),
+                                        color: const Color(0xFFC52127),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -265,10 +188,10 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 8,
                     ),
                     SizedBox(
-                      width: 315,
+                      width: 250,
                       height: 62,
                       child: CustomButton(title: 'Order', onPressed: () => {}),
                     )

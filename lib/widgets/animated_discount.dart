@@ -52,7 +52,7 @@ class _AnimatedDiscountState extends State<AnimatedDiscount>
               style: GoogleFonts.sora(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: const Color(0xFFC52127),
+                color: const Color(0xFF2F2D2C),
               ),
             );
           },

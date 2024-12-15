@@ -1,4 +1,4 @@
-package com.example.coffee_project
+package com.example.BISOU
 
 import io.flutter.embedding.android.FlutterActivity
 

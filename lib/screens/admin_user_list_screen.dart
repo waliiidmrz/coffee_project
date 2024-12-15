@@ -1,5 +1,5 @@
-import 'package:coffee_project/screens/StatisticsScreen.dart';
-import 'package:coffee_project/screens/UserDetailsScreen.dart';
+import 'package:BISOU/screens/StatisticsScreen.dart';
+import 'package:BISOU/screens/UserDetailsScreen.dart';
 import 'package:flutter/material.dart';
 
 class User {

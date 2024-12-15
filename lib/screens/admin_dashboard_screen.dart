@@ -1,4 +1,4 @@
-import 'package:coffee_project/screens/ProductDetailsScreen.dart';
+import 'package:BISOU/screens/ProductDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import 'cart_screen.dart';
