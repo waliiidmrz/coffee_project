@@ -254,6 +254,7 @@ class _DetailState extends State<Detail> {
                 ),
               ),
               title: 'Buy Now',
+              colors: null,
             ),
           ),
         ],

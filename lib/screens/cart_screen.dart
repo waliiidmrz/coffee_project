@@ -109,6 +109,9 @@ class _CartScreenState extends State<CartScreen> {
                       itemCount: _cartItems.length,
                       itemBuilder: (context, index) {
                         final item = _cartItems[index];
+                        final double totalPrice =
+                            item['price'] * item['quantity'];
+
                         return Dismissible(
                           key: Key(item['name']),
                           direction: DismissDirection.endToStart,
@@ -129,12 +132,66 @@ class _CartScreenState extends State<CartScreen> {
                             child:
                                 const Icon(Icons.delete, color: Colors.white),
                           ),
-                          child: CartItemCard(
-                            item: item,
-                            onAdd: () =>
-                                _updateQuantity(index, item['quantity'] + 1),
-                            onRemove: () =>
-                                _updateQuantity(index, item['quantity'] - 1),
+                          child: Card(
+                            elevation: 4,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: Colors.red,
+                                child: Text(
+                                  '${item['price'].toStringAsFixed(2)}DT',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                item['name'],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Quantity: ${item['quantity']} | Total: ${totalPrice.toStringAsFixed(2)}DT',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(
+                                        Icons.remove_circle_outline,
+                                        color: Colors.red),
+                                    onPressed: () => _updateQuantity(
+                                        index, item['quantity'] - 1),
+                                  ),
+                                  Text(
+                                    '${item['quantity']}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add_circle_outline,
+                                        color: Colors.green),
+                                    onPressed: () => _updateQuantity(
+                                        index, item['quantity'] + 1),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -150,6 +207,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
             ),
+
             const SizedBox(height: 16),
             // Total Section
             Row(
@@ -163,7 +221,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
                 Text(
-                  '\$${totalAmount.toStringAsFixed(2)}',
+                  '${totalAmount.toStringAsFixed(2)}DT',
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,

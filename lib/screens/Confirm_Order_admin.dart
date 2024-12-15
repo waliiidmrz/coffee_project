@@ -120,7 +120,7 @@ class OrderConfirmationScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Amount: \$${order.amount.toStringAsFixed(2)}',
+                              'Amount: ${order.amount.toStringAsFixed(2)}DT',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,

@@ -1,6 +1,7 @@
 import 'package:BISOU/screens/ProfileAdmin.dart' as profile_admin;
 import 'package:BISOU/screens/ProfileAdmin.dart';
 import 'package:BISOU/screens/Setting.dart';
+import 'package:BISOU/screens/admin_user_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomSidebar extends StatelessWidget {
@@ -30,13 +31,14 @@ class CustomSidebar extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProfileAdminScreen(
-                    user: profile_admin.User(
+                    user: User(
                       name: 'John',
                       lastname: 'Doe',
                       email: 'john.doe@example.com',
                       phoneNumber: '+1 234 567 890',
                       profileImage: 'https://via.placeholder.com/150',
                       birthDate: DateTime(1990, 5, 15),
+                      role: 'Admin',
                     ),
                   ),
                 ),

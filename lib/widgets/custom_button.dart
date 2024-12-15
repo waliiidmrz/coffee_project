@@ -9,6 +9,7 @@ class CustomButton extends StatefulWidget {
     super.key,
     required this.title,
     required this.onPressed,
+    required colors,
   });
 
   @override

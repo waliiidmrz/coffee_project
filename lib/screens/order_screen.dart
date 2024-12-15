@@ -193,7 +193,11 @@ class _OrderScreenState extends State<OrderScreen> {
                     SizedBox(
                       width: 250,
                       height: 62,
-                      child: CustomButton(title: 'Order', onPressed: () => {}),
+                      child: CustomButton(
+                        title: 'Order',
+                        onPressed: () => {},
+                        colors: null,
+                      ),
                     )
                   ],
                 ),

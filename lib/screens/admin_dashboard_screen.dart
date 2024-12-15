@@ -253,7 +253,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         margin: const EdgeInsets.only(right: 8.0),
                         decoration: BoxDecoration(
                           color: selectedCategory == index
-                              ? Colors.blue
+                              ? Colors.red
                               : Colors.grey[200],
                           borderRadius: BorderRadius.circular(12.0),
                         ),
@@ -342,7 +342,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
-                              '\$${product.price!.toStringAsFixed(2)}',
+                              '${product.price!.toStringAsFixed(2)}DT',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,

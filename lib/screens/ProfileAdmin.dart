@@ -1,75 +1,124 @@
+import 'package:BISOU/screens/admin_user_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'edit_profile_admin.dart';
+import 'edit_password_admin.dart';
 
-class User {
-  final String name;
-  final String lastname;
-  final String email;
-  final String phoneNumber;
-  final String profileImage;
-  final DateTime? birthDate;
+class ProfileAdminScreen extends StatefulWidget {
+  const ProfileAdminScreen({Key? key, required User user}) : super(key: key);
 
-  User({
-    required this.name,
-    required this.lastname,
-    required this.email,
-    required this.phoneNumber,
-    required this.profileImage,
-    this.birthDate,
-  });
+  @override
+  _ProfileAdminScreenState createState() => _ProfileAdminScreenState();
 }
 
-class ProfileAdminScreen extends StatelessWidget {
-  final User user;
+class _ProfileAdminScreenState extends State<ProfileAdminScreen> {
+  String _name = "John";
+  String _lastname = "Doe";
+  String _email = "john.doe@example.com";
+  String _phoneNumber = "+1 234 567 890";
+  String _profileImageUrl =
+      "https://via.placeholder.com/150"; // Placeholder profile image
+  String? _birthDate = "1990-05-15";
 
-  const ProfileAdminScreen({Key? key, required this.user}) : super(key: key);
+  Future<void> _navigateToEditProfile() async {
+    final updatedData = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfileAdminScreen(
+          name: _name,
+          lastname: _lastname,
+          phoneNumber: _phoneNumber,
+          birthDate: _birthDate,
+          profileImageUrl: _profileImageUrl,
+        ),
+      ),
+    );
+
+    if (updatedData != null) {
+      setState(() {
+        _name = updatedData['name'] ?? _name;
+        _lastname = updatedData['lastname'] ?? _lastname;
+        _phoneNumber = updatedData['phoneNumber'] ?? _phoneNumber;
+        _birthDate = updatedData['birthDate'] ?? _birthDate;
+        _profileImageUrl = updatedData['profileImageUrl'] ?? _profileImageUrl;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile updated successfully!')),
+      );
+    }
+  }
+
+  Future<void> _navigateToChangePassword() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditPasswordScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Profile',
-          style: TextStyle(color: Colors.black),
+          'Admin Profile',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: _navigateToEditProfile,
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Profile Picture
             Center(
-              child: CircleAvatar(
-                radius: 80,
-                backgroundImage: NetworkImage(user.profileImage),
+              child: Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    radius: 80,
+                    backgroundImage: NetworkImage(_profileImageUrl),
+                  ),
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: Colors.red,
+                    child: IconButton(
+                      icon: const Icon(Icons.camera_alt, color: Colors.white),
+                      onPressed: _navigateToEditProfile,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-            // Name
+            const SizedBox(height: 20),
+
+            // Name and Email
             Text(
-              '${user.name} ${user.lastname}',
+              '$_name $_lastname',
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
             const SizedBox(height: 8),
-            // Email
             Text(
-              user.email,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              _email,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             const SizedBox(height: 16),
-            // Details Card
+
+            // Information Section
             Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -77,57 +126,26 @@ class ProfileAdminScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Details',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
+                    _buildInfoRow(Icons.phone, 'Phone Number', _phoneNumber),
                     const Divider(),
-                    // Phone
-                    _buildDetailRow(
-                      icon: Icons.phone,
-                      label: 'Phone',
-                      value: user.phoneNumber,
-                    ),
-                    const SizedBox(height: 12),
-                    // Birthday
-                    if (user.birthDate != null)
-                      _buildDetailRow(
-                        icon: Icons.cake,
-                        label: 'Birthday',
-                        value:
-                            '${user.birthDate!.toLocal().toString().split(' ')[0]}',
-                      ),
-                    const SizedBox(height: 12),
-                    // Email
-                    _buildDetailRow(
-                      icon: Icons.email,
-                      label: 'Email',
-                      value: user.email,
-                    ),
+                    _buildInfoRow(
+                        Icons.cake, 'Birthdate', _birthDate ?? 'Not provided'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 32),
-            // Logout Button
+            const SizedBox(height: 16),
+
+            // Change Password Button
             ElevatedButton.icon(
-              onPressed: () {
-                // Handle logout logic
-              },
-              icon: const Icon(Icons.logout),
-              label: const Text('Logout'),
+              onPressed: _navigateToChangePassword,
+              icon: const Icon(Icons.lock),
+              label: const Text('Change Password'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.redAccent,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 14,
-                  horizontal: 20,
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -139,29 +157,36 @@ class ProfileAdminScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(
-      {required IconData icon, required String label, required String value}) {
+  Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, color: Colors.blue, size: 28),
-        const SizedBox(width: 16),
-        Text(
-          '$label:',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
+        CircleAvatar(
+          radius: 24,
+          backgroundColor: Colors.blueAccent.withOpacity(0.1),
+          child: Icon(icon, color: Colors.red),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 16),
         Expanded(
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black54,
-            ),
-            overflow: TextOverflow.ellipsis,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
           ),
         ),
       ],
