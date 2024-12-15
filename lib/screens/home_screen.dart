@@ -1,13 +1,7 @@
 import 'package:coffee_project/widgets/product_item.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../widgets/custo_sidebar.dart';
 import '../widgets/category_item.dart';
 import '../models/product.dart';
-import '../widgets/product_card.dart';
-import 'ProductDetailsScreen.dart';
-import 'package:provider/provider.dart';
-import '../providers/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -66,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Product> getFilteredProducts(String filter) {
     if (filter == 'All') return products;
-    if (filter == 'Promo') return products.where((p) => p.isPromo).toList();
+    if (filter == 'Promo') return products.where((p) => p.isPromo!).toList();
     return products;
   }
 

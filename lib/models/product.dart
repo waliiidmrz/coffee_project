@@ -1,13 +1,17 @@
 class Product {
-  final String name;
-  final double price;
-  final String imageUrl;
-  final bool isPromo;
+  final String? name;
+  final double? price;
+  final String? description;
+  final String? imageUrl;
+  final bool? isPromo;
+  final int? quantity;
 
   Product({
-    required this.name,
-    required this.price,
-    required this.imageUrl,
-    required this.isPromo,
+    this.name,
+    this.description,
+    this.quantity,
+    this.price,
+    this.imageUrl,
+    this.isPromo,
   });
 }

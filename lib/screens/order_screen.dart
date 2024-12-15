@@ -1,4 +1,6 @@
+import 'package:coffee_project/widgets/animated_discount.dart';
 import 'package:coffee_project/widgets/custom_button.dart';
+import 'package:coffee_project/widgets/gold_membership_container.dart';
 import 'package:coffee_project/widgets/type_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +18,32 @@ class _OrderScreenState extends State<OrderScreen> {
   int selectedType = 0;
   int selectedPickUpOption = 0;
   int selectedTableNumber = 1;
+  final List<Map<String, dynamic>> coffeeItems = [
+    {
+      "name": "Cappuccino",
+      "description": "with Chocolate",
+      "image": "assets/images/cappucino.jpeg",
+      "quantity": 1,
+    },
+    {
+      "name": "Americano",
+      "description": "Rich and Smooth",
+      "image": "assets/images/americano.jpeg",
+      "quantity": 1,
+    },
+    {
+      "name": "Espresso",
+      "description": "Strong and Bold",
+      "image": "assets/images/express.jpeg",
+      "quantity": 1,
+    },
+    {
+      "name": "Latte",
+      "description": "Creamy and Mild",
+      "image": "assets/images/latte.webp",
+      "quantity": 1,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,113 +79,7 @@ class _OrderScreenState extends State<OrderScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                width: 315,
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 54,
-                          height: 54,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Image.asset(
-                            "assets/images/americano.png",
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Cappucino",
-                              style: GoogleFonts.sora(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xff2F2D2C),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Text(
-                              "with Chocolate",
-                              style: GoogleFonts.sora(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: const Color(0xff9B9B9B),
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: 28,
-                          height: 28,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50),
-                              border: Border.all(color: Color(0xffEAEAEA))),
-                          child: Text(
-                            "-",
-                            style: GoogleFonts.sora(
-                              color: Color(0xffAAADB0),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "1",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Container(
-                          width: 28,
-                          height: 28,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                              color: const Color(0xffEAEAEA),
-                            ),
-                          ),
-                          child: Text(
-                            "+",
-                            style: GoogleFonts.sora(
-                              color: const Color(0xffAAADB0),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+              buildCoffeeList(),
               const SizedBox(
                 height: 20,
               ),
@@ -168,49 +90,7 @@ class _OrderScreenState extends State<OrderScreen> {
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                width: 315,
-                height: 56,
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: const Color(0xffEAEAEA),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Iconsax.discount_shape5,
-                          size: 24,
-                          color: Color(0xffC67C4E),
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Text(
-                          "1 Discount is applied",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Icon(
-                      Icons.chevron_right,
-                      size: 20,
-                    )
-                  ],
-                ),
-              ),
+              AnimatedGoldMembershipContainer(),
               const SizedBox(
                 height: 20,
               ),
@@ -255,34 +135,13 @@ class _OrderScreenState extends State<OrderScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Delivery Fee",
+                          "Discount",
                           style: GoogleFonts.sora(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "\$ 2.0",
-                              style: GoogleFonts.sora(
-                                decoration: TextDecoration.lineThrough,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              "\$ 1.0",
-                              style: GoogleFonts.sora(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        )
+                        const AnimatedDiscount(targetValue: 2.56),
                       ],
                     ),
                     const SizedBox(
@@ -291,22 +150,29 @@ class _OrderScreenState extends State<OrderScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Total Payment",
-                          style: GoogleFonts.sora(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        Row(
+                          children: [
+                            const Icon(Icons.attach_money, color: Colors.green),
+                            const SizedBox(width: 5),
+                            Text(
+                              "Total Payment",
+                              style: GoogleFonts.sora(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
                         ),
                         Text(
-                          "\$ 5.53",
+                          "\$2.53",
                           style: GoogleFonts.sora(
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -334,7 +200,7 @@ class _OrderScreenState extends State<OrderScreen> {
                             children: [
                               const Icon(
                                 Iconsax.moneys,
-                                color: Color(0xffC67C4E),
+                                color: Color(0xFFC52127),
                                 weight: 24,
                               ),
                               const SizedBox(
@@ -354,7 +220,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                       height: 24,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
-                                        color: Color(0xffC67C4E),
+                                        color: Color(0xFFC52127),
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -487,7 +353,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   "Pick-Up Options",
                   style: GoogleFonts.sora(
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.start,
                 ),
@@ -514,9 +380,11 @@ class _OrderScreenState extends State<OrderScreen> {
               ],
             ),
             if (selectedPickUpOption == 0) ...[
-              buildTableNumberPicker(),
+              Center(child: buildTableNumberPicker()),
             ],
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 8,
+            ),
             Container(
               height: 2,
               decoration: const BoxDecoration(
@@ -558,16 +426,17 @@ class _OrderScreenState extends State<OrderScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xffC67C4E) : Colors.white,
+        color: isSelected ? const Color(0xFFC52127) : Colors.white,
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
-          color: isSelected ? const Color(0xffC67C4E) : const Color(0xffDEDEDE),
+          color: isSelected ? const Color(0xFFC52127) : const Color(0xffDEDEDE),
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
           fontFamily: 'Cspercy',
+          fontWeight: FontWeight.bold,
           fontSize: 16,
           color: isSelected ? Colors.white : Colors.black,
         ),
@@ -586,7 +455,7 @@ class _OrderScreenState extends State<OrderScreen> {
               "Table Number :",
               style: GoogleFonts.sora(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(
@@ -603,9 +472,16 @@ class _OrderScreenState extends State<OrderScreen> {
           ],
         ),
         SizedBox(
-          height: 80, // Increase height to allow larger circles
+          height: 80,
+          width: 300,
           child: WheelPicker(
-            style: const WheelPickerStyle(diameterRatio: 2, itemExtent: 27),
+            style: const WheelPickerStyle(
+                diameterRatio: 2,
+                itemExtent: 27,
+                magnification: 50,
+                shiftAnimationStyle: WheelShiftAnimationStyle(
+                    duration: Duration(seconds: 3),
+                    curve: Curves.fastOutSlowIn)),
             itemCount: 20, // Number of tables
             scrollDirection: Axis.horizontal, // Set horizontal scrolling
             onIndexChanged: (index) {
@@ -623,11 +499,11 @@ class _OrderScreenState extends State<OrderScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: selectedTableNumber == index + 1
-                      ? const Color(0xffC67C4E)
+                      ? const Color(0xFFC52127)
                       : Colors.white,
                   border: Border.all(
                     color: selectedTableNumber == index + 1
-                        ? const Color(0xffC67C4E)
+                        ? const Color(0xFFC52127)
                         : const Color(0xffDEDEDE),
                   ),
                 ),
@@ -646,6 +522,148 @@ class _OrderScreenState extends State<OrderScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildCoffeeList() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListView.builder(
+        shrinkWrap: true, // Allows flexible height based on content
+        physics:
+            const NeverScrollableScrollPhysics(), // Scrolls with the main view
+        itemCount: coffeeItems.length,
+        itemBuilder: (context, index) {
+          final coffee = coffeeItems[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 5.0),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Coffee Image and Info
+                    Row(
+                      children: [
+                        // Coffee Image
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                              image: AssetImage(coffee["image"]),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // Coffee Name and Description
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              coffee["name"],
+                              style: GoogleFonts.sora(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xff2F2D2C),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              coffee["description"],
+                              style: GoogleFonts.sora(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: const Color(0xff9B9B9B),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    // Quantity Controls
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (coffee["quantity"] > 1) coffee["quantity"]--;
+                            });
+                          },
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: const Color(0xffEAEAEA),
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.remove,
+                              color: Color(0xffAAADB0),
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) {
+                            return ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            );
+                          },
+                          child: Text(
+                            "${coffee["quantity"]}",
+                            key: ValueKey<int>(coffee["quantity"]),
+                            style: GoogleFonts.sora(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              coffee["quantity"]++;
+                            });
+                          },
+                          child: Container(
+                            width: 32,
+                            height: 32,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFC52127),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

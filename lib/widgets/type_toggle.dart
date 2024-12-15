@@ -24,14 +24,26 @@ class TypeToggle extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => onTabChanged(0),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
               width: 153.5,
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color:
-                    selectedTab == 0 ? const Color(0xffC67C4E) : Colors.white,
+                    selectedTab == 0 ? const Color(0xFFC52127) : Colors.white,
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: selectedTab == 0
+                    ? [
+                        BoxShadow(
+                          color: const Color(0xFFC52127).withOpacity(0.3),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 4),
+                        )
+                      ]
+                    : [],
               ),
               child: Text(
                 "Delivery",
@@ -45,14 +57,26 @@ class TypeToggle extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => onTabChanged(1),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
               width: 153.5,
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color:
-                    selectedTab == 1 ? const Color(0xffC67C4E) : Colors.white,
+                    selectedTab == 1 ? const Color(0xFFC52127) : Colors.white,
                 borderRadius: BorderRadius.circular(10),
+                boxShadow: selectedTab == 1
+                    ? [
+                        BoxShadow(
+                          color: const Color(0xFFC52127).withOpacity(0.3),
+                          blurRadius: 8,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 4),
+                        )
+                      ]
+                    : [],
               ),
               child: Text(
                 "Pick Up",

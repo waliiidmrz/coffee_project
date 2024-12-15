@@ -1,4 +1,3 @@
-import 'package:coffee_project/screens/admin_order_management_screen.dart';
 import 'package:coffee_project/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,7 +61,7 @@ class _DetailState extends State<Detail> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: DecorationImage(
-          image: AssetImage(widget.product.imageUrl),
+          image: AssetImage(widget.product.imageUrl!),
           fit: BoxFit.cover,
         ),
       ),
@@ -76,7 +75,7 @@ class _DetailState extends State<Detail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.product.name,
+            widget.product.name!,
             style: const TextStyle(
               fontFamily: 'Csnolan',
               fontSize: 30,
@@ -234,7 +233,7 @@ class _DetailState extends State<Detail> {
               children: [
                 const Text('Price', style: TextStyle(color: Colors.grey)),
                 Text(
-                  "\$${widget.product.price.toStringAsFixed(2)}",
+                  "\$${widget.product.price!.toStringAsFixed(2)}",
                   style: GoogleFonts.sora(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

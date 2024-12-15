@@ -1,6 +1,6 @@
 import 'package:coffee_project/screens/GiftCardScreen.dart';
-import 'package:coffee_project/screens/My_Orders.dart';
-import 'package:coffee_project/screens/ProfileScreen.dart';
+import 'package:coffee_project/screens/order_screen.dart';
+import 'package:coffee_project/screens/profile_screen.dart';
 import 'package:coffee_project/widgets/custo_sidebar.dart';
 import 'package:coffee_project/widgets/custom_appbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
-      MyOrdersScreen(),
+      OrderScreen(),
       GiftCardScreen(),
       ProfileScreen(),
     ];

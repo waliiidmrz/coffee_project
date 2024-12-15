@@ -64,7 +64,7 @@ class Item extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.asset(
-                            product.imageUrl,
+                            product.imageUrl!,
                             fit: BoxFit.cover,
                             width: 150,
                             height: 132,
@@ -107,7 +107,7 @@ class Item extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  product.name,
+                  product.name!,
                   style: GoogleFonts.sora(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -128,7 +128,7 @@ class Item extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "\$${product.price.toStringAsFixed(2)}",
+                      "\$${product.price!.toStringAsFixed(2)}",
                       style: GoogleFonts.sora(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,

@@ -33,7 +33,7 @@ class ProductCard extends StatelessWidget {
                     topRight: Radius.circular(15),
                   ),
                   child: Image.asset(
-                    product.imageUrl,
+                    product.imageUrl!,
                     height: 120,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
                   bottom: 8,
                   left: 8,
                   child: Text(
-                    product.name,
+                    product.name!,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -84,7 +84,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '\$${product.price.toStringAsFixed(2)}',
+                    '\$${product.price!.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontFamily: 'Arial_Regular',
                       fontSize: 16,

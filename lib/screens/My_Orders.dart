@@ -40,7 +40,7 @@ class MyOrdersScreen extends StatelessWidget {
                           bottomLeft: Radius.circular(12),
                         ),
                         child: Image.asset(
-                          product.imageUrl,
+                          product.imageUrl!,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
@@ -53,7 +53,7 @@ class MyOrdersScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product.name,
+                                product.name!,
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -61,7 +61,7 @@ class MyOrdersScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 5),
                               Text(
-                                '\$${product.price.toStringAsFixed(2)}',
+                                '\$${product.price!.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,

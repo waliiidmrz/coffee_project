@@ -20,96 +20,77 @@ class GiftCardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double balance =
-        _parseBalance(giftCard['balance']); // Safely parse balance
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gift Card'),
-        backgroundColor: const Color(0xFFC52127),
-      ),
       body: Container(
-        color: const Color(0xFFF5F5F5), // Light background
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/giftbg1.avif'), // Replace with your image
+              fit: BoxFit.cover,
+              opacity: 0.1),
+        ),
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+          child: Container(
+            height: 250,
+            width: 320,
+            alignment: Alignment.topRight,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black
+                      .withOpacity(0.2), // Shadow color with opacity
+                  blurRadius: 8, // Blur intensity
+                  offset: const Offset(0, 4), // Shadow position
+                ),
+              ],
+            ),
+            child: Stack(
               children: [
-                // Gift Card Display
-                Card(
-                  elevation: 8,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFC52127),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Gift Card Balance',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          '\$${balance.toStringAsFixed(2)}', // Safely display the balance
-                          style: const TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Card Number: ${giftCard['cardNumber']}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white70,
-                          ),
-                        ),
-                        Text(
-                          'Expiry Date: ${giftCard['expiryDate']}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      color: Colors.grey[200]!.withOpacity(.6),
+                      height: 250,
+                      width: 320,
+                      child: const Image(
+                        image: AssetImage('assets/images/giftcard.png'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
-                // Redeem Button
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle redeem action
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFC52127),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  child: const Text(
-                    'Redeem Balance',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                const Positioned(
+                    bottom: 27,
+                    right: 65,
+                    child: Text(
+                      '12/12/2024',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 192, 44, 34),
+                          fontWeight: FontWeight.w500),
+                    )),
+                const Positioned(
+                    top: 77,
+                    right: 50,
+                    child: Text(
+                      '200.00 dt',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontWeight: FontWeight.w500),
+                    )),
+                const Positioned(
+                    top: 133,
+                    right: 35,
+                    child: Text(
+                      '06-99-48-18',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontWeight: FontWeight.w500),
+                    ))
               ],
             ),
           ),

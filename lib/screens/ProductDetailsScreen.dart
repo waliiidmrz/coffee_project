@@ -35,7 +35,7 @@ class ProductDetailsScreen extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.asset(
-                            product.imageUrl,
+                            product.imageUrl!,
                             width: 315,
                             height: 250,
                             fit: BoxFit.cover,
@@ -47,7 +47,7 @@ class ProductDetailsScreen extends StatelessWidget {
                       bottom: 20,
                       left: 50,
                       child: Text(
-                        product.name,
+                        product.name!,
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -75,7 +75,7 @@ class ProductDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    ' ${product.price.toStringAsFixed(2)}\ DT',
+                    ' ${product.price!.toStringAsFixed(2)}\ DT',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
