@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:coffee_project/data/mockuser.dart';
-import 'package:coffee_project/models/user.dart';
-import 'package:coffee_project/screens/edit_phone.dart';
-import 'package:coffee_project/widgets/display_image.dart';
+import 'package:BISOU/data/mockuser.dart';
+import 'package:BISOU/models/user.dart';
+import 'package:BISOU/screens/edit_phone.dart';
+import 'package:BISOU/widgets/display_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {

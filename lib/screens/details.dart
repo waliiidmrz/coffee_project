@@ -1,4 +1,4 @@
-import 'package:coffee_project/screens/order_screen.dart';
+import 'package:BISOU/screens/order_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/product.dart';

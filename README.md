@@ -1,4 +1,4 @@
-# coffee_project
+# BISOU
 
 A new Flutter project.
 

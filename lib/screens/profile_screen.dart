@@ -1,5 +1,5 @@
-import 'package:coffee_project/screens/edit_profile_screen.dart';
-import 'package:coffee_project/screens/rewards_dialog.dart';
+import 'package:BISOU/screens/edit_profile_screen.dart';
+import 'package:BISOU/screens/rewards_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

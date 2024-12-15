@@ -1,4 +1,4 @@
-import 'package:coffee_project/providers/provider.dart';
+import 'package:BISOU/providers/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

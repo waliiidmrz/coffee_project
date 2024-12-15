@@ -1,5 +1,5 @@
-import 'package:coffee_project/data/mockuser.dart';
-import 'package:coffee_project/widgets/horizontalLine%20.dart';
+import 'package:BISOU/data/mockuser.dart';
+import 'package:BISOU/widgets/horizontalLine%20.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:coffee_project/screens/admin_user_list_screen.dart';
+import 'package:BISOU/screens/admin_user_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsScreen extends StatelessWidget {

@@ -1,7 +1,7 @@
-import 'package:coffee_project/widgets/animated_discount.dart';
-import 'package:coffee_project/widgets/custom_button.dart';
-import 'package:coffee_project/widgets/gold_membership_container.dart';
-import 'package:coffee_project/widgets/type_toggle.dart';
+import 'package:BISOU/widgets/animated_discount.dart';
+import 'package:BISOU/widgets/custom_button.dart';
+import 'package:BISOU/widgets/gold_membership_container.dart';
+import 'package:BISOU/widgets/type_toggle.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';

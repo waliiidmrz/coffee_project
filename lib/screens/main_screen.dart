@@ -1,8 +1,8 @@
-import 'package:coffee_project/screens/GiftCardScreen.dart';
-import 'package:coffee_project/screens/order_screen.dart';
-import 'package:coffee_project/screens/profile_screen.dart';
-import 'package:coffee_project/widgets/custo_sidebar.dart';
-import 'package:coffee_project/widgets/custom_appbar.dart';
+import 'package:BISOU/screens/GiftCardScreen.dart';
+import 'package:BISOU/screens/order_screen.dart';
+import 'package:BISOU/screens/profile_screen.dart';
+import 'package:BISOU/widgets/custo_sidebar.dart';
+import 'package:BISOU/widgets/custom_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';

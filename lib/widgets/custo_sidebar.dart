@@ -1,3 +1,6 @@
+import 'package:BISOU/screens/ProfileAdmin.dart' as profile_admin;
+import 'package:BISOU/screens/ProfileAdmin.dart';
+import 'package:BISOU/screens/Setting.dart';
 import 'package:flutter/material.dart';
 
 class CustomSidebar extends StatelessWidget {
@@ -23,16 +26,33 @@ class CustomSidebar extends StatelessWidget {
             leading: const Icon(Icons.person),
             title: const Text('Profile'),
             onTap: () {
-              // Navigate to profile screen
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileAdminScreen(
+                    user: profile_admin.User(
+                      name: 'John',
+                      lastname: 'Doe',
+                      email: 'john.doe@example.com',
+                      phoneNumber: '+1 234 567 890',
+                      profileImage: 'https://via.placeholder.com/150',
+                      birthDate: DateTime(1990, 5, 15),
+                    ),
+                  ),
+                ),
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
-              // Navigate to settings screen
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
             },
           ),
           ListTile(
