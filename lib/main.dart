@@ -3,6 +3,7 @@ import 'package:BISOU/screens/admin_dashboard_screen.dart';
 import 'package:BISOU/screens/forgot_password.dart';
 import 'package:BISOU/screens/main_screen.dart';
 import 'package:BISOU/screens/reset_password.dart';
+import 'package:BISOU/utils/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'screens/splash_screen.dart';
 import 'screens/start_screen.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: MaterialApp(
-        title: 'Coffee Shop App',
+        title: 'BISOU',
         theme: ThemeData(
           primaryColor: const Color(0xFFC52127),
           scaffoldBackgroundColor: Colors.white,
