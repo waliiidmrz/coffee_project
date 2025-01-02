@@ -130,6 +130,16 @@ flutter:
       fonts : 
         - asset: assets/fonts/Volney.otf
     
+    - family: Autography
+      fonts : 
+        - asset: assets/fonts/Autography.otf
+    - family: Naturally
+      fonts : 
+        - asset: assets/fonts/Naturaly.otf
+    - family: Paul Jackson
+      fonts : 
+        - asset: assets/fonts/Paul Jackson_personal use.ttf
+    
     
   
   # To add assets to your application, add an assets section, like this:
