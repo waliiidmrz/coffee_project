@@ -1,155 +1,168 @@
-import 'package:BISOU/screens/admin_user_list_screen.dart';
 import 'package:flutter/material.dart';
-import 'edit_profile_admin.dart';
-import 'edit_password_admin.dart';
 
-class ProfileAdminScreen extends StatefulWidget {
-  const ProfileAdminScreen({Key? key, required User user}) : super(key: key);
+class AdminProfileScreen extends StatelessWidget {
+  final Map<String, dynamic> adminDetails = {
+    'name': 'Admin Name',
+    'email': 'admin@example.com',
+    'role': 'Administrator',
+    'profilePicture': 'https://via.placeholder.com/100',
+  };
 
-  @override
-  _ProfileAdminScreenState createState() => _ProfileAdminScreenState();
-}
-
-class _ProfileAdminScreenState extends State<ProfileAdminScreen> {
-  String _name = "John";
-  String _lastname = "Doe";
-  String _email = "john.doe@example.com";
-  String _phoneNumber = "+1 234 567 890";
-  String _profileImageUrl =
-      "https://via.placeholder.com/150"; // Placeholder profile image
-  String? _birthDate = "1990-05-15";
-
-  Future<void> _navigateToEditProfile() async {
-    final updatedData = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EditProfileAdminScreen(
-          name: _name,
-          lastname: _lastname,
-          phoneNumber: _phoneNumber,
-          birthDate: _birthDate,
-          profileImageUrl: _profileImageUrl,
-        ),
-      ),
-    );
-
-    if (updatedData != null) {
-      setState(() {
-        _name = updatedData['name'] ?? _name;
-        _lastname = updatedData['lastname'] ?? _lastname;
-        _phoneNumber = updatedData['phoneNumber'] ?? _phoneNumber;
-        _birthDate = updatedData['birthDate'] ?? _birthDate;
-        _profileImageUrl = updatedData['profileImageUrl'] ?? _profileImageUrl;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated successfully!')),
-      );
-    }
-  }
-
-  Future<void> _navigateToChangePassword() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const EditPasswordScreen(),
-      ),
-    );
-  }
+  final List<Map<String, String>> stats = [
+    {'label': 'Users', 'value': '1200'},
+    {'label': 'Orders', 'value': '3500'},
+    {'label': 'Revenue', 'value': '\$50,000'},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        centerTitle: true,
         title: const Text(
           'Admin Profile',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.red,
-        elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit, color: Colors.white),
-            onPressed: _navigateToEditProfile,
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings'); // Navigate to settings
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              Navigator.pushNamed(context, '/login'); // Logout and go to login
+            },
           ),
         ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Profile Picture
-            Center(
-              child: Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  CircleAvatar(
-                    radius: 80,
-                    backgroundImage: NetworkImage(_profileImageUrl),
-                  ),
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: Colors.red,
-                    child: IconButton(
-                      icon: const Icon(Icons.camera_alt, color: Colors.white),
-                      onPressed: _navigateToEditProfile,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Profile Header
+            _buildProfileHeader(context),
             const SizedBox(height: 20),
+            // Stats Section
+            _buildStatsSection(),
+            const SizedBox(height: 20),
+            // Actions Section
+            _buildActionsSection(context),
+          ],
+        ),
+      ),
+    );
+  }
 
-            // Name and Email
-            Text(
-              '$_name $_lastname',
-              style: const TextStyle(
-                fontSize: 26,
+  Widget _buildProfileHeader(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 50,
+          backgroundImage: NetworkImage(adminDetails['profilePicture']),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          adminDetails['name'],
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          adminDetails['email'],
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          adminDetails['role'],
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () {
+            // Navigate to Edit Profile
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFC52127),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          child: const Text(
+            'Edit Profile',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatsSection() {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Admin Statistics',
+              style: TextStyle(
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              _email,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            const SizedBox(height: 16),
-
-            // Information Section
-            Card(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: stats.map((stat) {
+                return Column(
                   children: [
-                    _buildInfoRow(Icons.phone, 'Phone Number', _phoneNumber),
-                    const Divider(),
-                    _buildInfoRow(
-                        Icons.cake, 'Birthdate', _birthDate ?? 'Not provided'),
+                    Text(
+                      stat['value']!,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      stat['label']!,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Change Password Button
-            ElevatedButton.icon(
-              onPressed: _navigateToChangePassword,
-              icon: const Icon(Icons.lock),
-              label: const Text('Change Password'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -157,39 +170,74 @@ class _ProfileAdminScreenState extends State<ProfileAdminScreen> {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
+  Widget _buildActionsSection(BuildContext context) {
+    return Column(
       children: [
-        CircleAvatar(
-          radius: 24,
-          backgroundColor: Colors.blueAccent.withOpacity(0.1),
-          child: Icon(icon, color: Colors.red),
+        _buildActionCard(
+          context,
+          title: 'Manage Users',
+          icon: Icons.people,
+          onTap: () {
+            // Navigate to Manage Users
+          },
         ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        const SizedBox(height: 10),
+        _buildActionCard(
+          context,
+          title: 'View Reports',
+          icon: Icons.bar_chart,
+          onTap: () {
+            // Navigate to View Reports
+          },
+        ),
+        const SizedBox(height: 10),
+        _buildActionCard(
+          context,
+          title: 'Settings',
+          icon: Icons.settings,
+          onTap: () {
+            // Navigate to Settings
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionCard(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
             children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black54,
-                ),
+              CircleAvatar(
+                backgroundColor: const Color(0xFFC52127),
+                child: Icon(icon, color: Colors.white),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(width: 16),
               Text(
-                value,
+                title,
                 style: const TextStyle(
                   fontSize: 16,
-                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
+              const Spacer(),
+              const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

@@ -138,9 +138,10 @@ class _AdminOrderManagementScreenState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order Management'),
-        backgroundColor: Colors.white,
-        elevation: 0,
+        title: const Text(
+          'Order Management',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
       ),
       body: Column(
         children: [
