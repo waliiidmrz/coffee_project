@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
 import 'package:BISOU/widgets/welcom_back.dart';
 import 'package:flutter/material.dart';
-=======
-import 'package:flutter/material.dart';
-import 'package:BISOU/widgets/welcome_back.dart';
->>>>>>> Stashed changes
 import 'package:BISOU/data/mockuser.dart';
 
 class LoginScreen extends StatefulWidget {
