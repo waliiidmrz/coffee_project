@@ -1,5 +1,4 @@
 import 'package:BISOU/screens/home_screen.dart';
-import 'package:BISOU/widgets/custom_button.dart';
 import 'package:BISOU/widgets/gold_membership_container.dart';
 import 'package:BISOU/widgets/pay_button.dart';
 import 'package:BISOU/widgets/payment_options.dart';

@@ -1,4 +1,3 @@
-import 'package:BISOU/screens/ProfileAdmin.dart' as profile_admin;
 import 'package:BISOU/screens/ProfileAdmin.dart';
 import 'package:BISOU/screens/Setting.dart';
 import 'package:BISOU/screens/admin_user_list_screen.dart';

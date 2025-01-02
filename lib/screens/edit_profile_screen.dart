@@ -5,7 +5,6 @@ import 'package:BISOU/screens/edit_email.dart';
 import 'package:BISOU/screens/edit_name.dart';
 import 'package:BISOU/screens/edit_phone.dart';
 import 'package:BISOU/screens/edit_photo.dart';
-import 'package:BISOU/widgets/display_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {

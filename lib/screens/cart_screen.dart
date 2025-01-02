@@ -1,6 +1,5 @@
 import 'package:BISOU/screens/Order_admin.dart';
 import 'package:flutter/material.dart';
-import '../widgets/cart_item_card.dart';
 
 class CartScreen extends StatefulWidget {
   final List<Map<String, dynamic>> cartItems;

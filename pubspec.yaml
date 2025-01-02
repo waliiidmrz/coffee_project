@@ -129,6 +129,15 @@ flutter:
     - family: Volney
       fonts : 
         - asset: assets/fonts/Volney.otf
+    - family: Autography
+      fonts : 
+        - asset: assets/fonts/Autography.otf
+    - family: Naturally
+      fonts : 
+        - asset: assets/fonts/Naturaly.otf
+    - family: Paul Jackson
+      fonts : 
+        - asset: assets/fonts/Paul Jackson_personal use.ttf
     
     - family: Autography
       fonts : 

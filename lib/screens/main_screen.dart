@@ -1,4 +1,4 @@
-import 'package:BISOU/screens/GiftCardScreen.dart';
+import 'package:BISOU/screens/gift_card_screen.dart';
 import 'package:BISOU/screens/order_screen.dart';
 import 'package:BISOU/screens/profile_screen.dart';
 import 'package:BISOU/widgets/custo_sidebar.dart';
