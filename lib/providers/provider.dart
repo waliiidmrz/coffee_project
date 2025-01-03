@@ -6,7 +6,7 @@ class CartProvider with ChangeNotifier {
 
   List<Product> get cartItems => _cartItems;
 
-  void addToCart(Product product) {
+  void addToCart(Product product, int quantity) {
     _cartItems.add(product);
     notifyListeners();
   }

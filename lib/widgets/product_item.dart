@@ -7,7 +7,12 @@ import '../screens/details.dart';
 class Item extends StatelessWidget {
   final Product product;
 
-  const Item({Key? key, required this.product}) : super(key: key);
+  const Item(
+      {Key? key,
+      required this.product,
+      required Null Function(String name, double price, int quantity)
+          addToCart})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

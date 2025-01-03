@@ -1,3 +1,4 @@
+import 'package:BISOU/screens/cart_screen_user.dart';
 import 'package:BISOU/screens/gift_card_screen.dart';
 import 'package:BISOU/screens/order_screen.dart';
 import 'package:BISOU/screens/profile_screen.dart';
@@ -23,7 +24,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
-      OrderScreen(),
+      CartScreen(),
       GiftCardScreen(),
       ProfileScreen(),
     ];

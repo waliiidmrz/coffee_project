@@ -200,20 +200,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 final product = getFilteredProducts(selectedFilter)[index];
                 return Item(
                   product: product,
-                  /* onAddToCart: () {
-                    context.read<CartProvider>().addToCart(product);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${product.name} added to cart')),
-                    );
+                  addToCart: (String name, double price, int quantity) {
+                    // Add your logic here
                   },
-                  onViewDetails: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ProductDetailsScreen(product: product),
-                      ),
-                    );
-                  },*/
                 );
               },
             ),
