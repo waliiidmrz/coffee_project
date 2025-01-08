@@ -1,4 +1,4 @@
-import 'package:BISOU/screens/edit_profile_screen.dart';
+import 'package:BISOU/screens/Edit_Profile_user/edit_profile_screen.dart';
 import 'package:BISOU/screens/favorites_screen.dart';
 import 'package:BISOU/screens/order_history_screen.dart';
 import 'package:BISOU/screens/rewards_dialog.dart';

@@ -1,4 +1,4 @@
-import 'package:BISOU/screens/admin_main_screen.dart';
+import 'package:BISOU/screens/Admin/admin_main_screen.dart';
 //import 'package:BISOU/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import '../utils/validators.dart'; // Import the validators file

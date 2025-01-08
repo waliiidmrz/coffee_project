@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:BISOU/screens/StatisticsScreen.dart';
+import 'package:BISOU/screens/Admin/StatisticsScreen.dart';
 import 'package:BISOU/screens/UserDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

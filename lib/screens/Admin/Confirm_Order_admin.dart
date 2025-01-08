@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/admin_order_management_screen.dart';
+import 'admin_order_management_screen.dart';
 
 class OrderConfirmationScreen extends StatelessWidget {
   final Order order;

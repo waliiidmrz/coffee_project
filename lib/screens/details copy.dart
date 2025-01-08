@@ -241,7 +241,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            context.read<CartProvider>().addToCart(
+            context.read<CartProvider1>().addToCart(
                   widget.product,
                   quantity,
                   selectedSize == 0

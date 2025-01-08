@@ -1,6 +1,6 @@
 import 'package:BISOU/screens/ProductDetailsScreen.dart';
 import 'package:flutter/material.dart';
-import '../models/product.dart';
+import '../../models/product.dart';
 import 'cart_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {

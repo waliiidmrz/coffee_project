@@ -1,6 +1,6 @@
-import 'package:BISOU/screens/ProfileAdmin.dart';
+import 'package:BISOU/screens/Admin/ProfileAdmin.dart';
 import 'package:BISOU/screens/Setting.dart';
-import 'package:BISOU/screens/admin_user_list_screen.dart';
+import 'package:BISOU/screens/Admin/admin_user_list_screen.dart';
 import 'package:BISOU/screens/profile_screen%20copy.dart';
 import 'package:flutter/material.dart';
 

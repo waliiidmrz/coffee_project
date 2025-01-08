@@ -20,6 +20,18 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   int selectedSize = 1;
   int quantity = 1; // Default quantity is 1
+  String selectedOption = "Caramel"; // Default selected option
+  bool showAllOptions = false;
+
+  final List<String> options = [
+    "Caramel",
+    "Vanilla",
+    "Hazelnut",
+    "Mocha",
+    "Coconut",
+    "Pumpkin Spice",
+    "Irish Cream",
+  ]; // List of options
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +54,7 @@ class _ProductDetailState extends State<ProductDetail> {
             _buildProductInfo(),
             SizedBox(height: size.height * 0.02),
             _buildStaticDetails(size),
+            _buildOptionsSelector(),
             _buildQuantitySelector(),
             _buildFooter(size),
           ],
@@ -203,6 +216,74 @@ class _ProductDetailState extends State<ProductDetail> {
           ),
           const SizedBox(height: 16),
         ],
+      ),
+    );
+  }
+
+  Widget _buildOptionsSelector() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Options',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 8),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                showAllOptions ? options.length : 3,
+                (index) => _buildOptionButton(options[index]),
+              ),
+            ),
+          ),
+          if (options.length > 3)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    showAllOptions = !showAllOptions;
+                  });
+                },
+                child: Text(
+                  showAllOptions ? "Show Less" : "Show More",
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOptionButton(String option) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedOption = option;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: selectedOption == option ? Colors.red : Colors.grey[200],
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Text(
+          option,
+          style: TextStyle(
+            color: selectedOption == option ? Colors.white : Colors.black,
+          ),
+        ),
       ),
     );
   }

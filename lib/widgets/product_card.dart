@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:BISOU/providers/provider.dart';
+import 'package:BISOU/providers/providercart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
@@ -59,7 +60,7 @@ class _ProductCardState extends State<ProductCard>
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = context.read<CartProvider>();
+    final cartProvider = context.read<CartProvider1>();
 
     return GestureDetector(
       onTap: widget.onViewDetails, // Navigate to product details when tapped
@@ -144,8 +145,8 @@ class _ProductCardState extends State<ProductCard>
                     const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
-                        cartProvider.addToCart(widget.product,
-                            1); // Assuming the second argument is the quantity
+                        cartProvider.addToCart(widget.product, 1, 0 as String,
+                            0 as String); // Assuming the third and fourth arguments are default values
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

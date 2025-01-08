@@ -1,3 +1,4 @@
+import 'package:BISOU/screens/ProductDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,7 +24,14 @@ class Item extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Detail(product: product),
+              builder: (context) => ProductDetail(
+                product: product,
+                onAddToCart: (String, double, int) {
+                  product.name;
+                  product.price;
+                  product.quantity;
+                },
+              ),
             ),
           );
         },

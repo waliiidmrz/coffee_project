@@ -1,11 +1,13 @@
+import 'package:BISOU/models/product.dart';
 import 'package:BISOU/providers/provider.dart';
+import 'package:BISOU/providers/providercart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MyOrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final cartProvider = context.watch<CartProvider>();
+    final cartProvider = context.watch<CartProvide>();
     final cartItems = cartProvider.cartItems;
 
     return Scaffold(
@@ -74,7 +76,7 @@ class MyOrdersScreen extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
-                          cartProvider.removeFromCart(product);
+                          cartProvider.removeFromCart(product as Product);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content:

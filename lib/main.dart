@@ -1,5 +1,6 @@
 import 'package:BISOU/providers/provider.dart';
-import 'package:BISOU/screens/admin_dashboard_screen.dart';
+import 'package:BISOU/providers/providercart.dart';
+import 'package:BISOU/screens/Admin/admin_dashboard_screen.dart';
 import 'package:BISOU/screens/forgot_password.dart';
 import 'package:BISOU/screens/main_screen.dart';
 import 'package:BISOU/screens/reset_password.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // Example provider setup
-        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider1()),
       ],
       child: MaterialApp(
         title: 'BISOU',

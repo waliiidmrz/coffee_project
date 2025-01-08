@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:BISOU/data/mockuser.dart';
 import 'package:BISOU/models/user.dart';
-import 'package:BISOU/screens/edit_email.dart';
-import 'package:BISOU/screens/edit_name.dart';
-import 'package:BISOU/screens/edit_phone.dart';
-import 'package:BISOU/screens/edit_photo.dart';
+import 'package:BISOU/screens/Edit_Profile_user/edit_email.dart';
+import 'package:BISOU/screens/Edit_Profile_user/edit_name.dart';
+import 'package:BISOU/screens/Edit_Profile_user/edit_phone.dart';
+import 'package:BISOU/screens/Edit_Profile_user/edit_photo.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {

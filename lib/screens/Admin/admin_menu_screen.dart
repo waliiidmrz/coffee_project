@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../models/menu.dart';
-import '../screens/StatisticsMenuScreen.dart';
+import '../../models/menu.dart';
+import 'StatisticsMenuScreen.dart';
 
 class AdminMenuScreen extends StatefulWidget {
   const AdminMenuScreen({Key? key}) : super(key: key);

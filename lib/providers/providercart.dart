@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 
-class CartProvider with ChangeNotifier {
+class CartProvider1 with ChangeNotifier {
   final List<Map<String, dynamic>> _cartItems = [];
 
   List<Map<String, dynamic>> get cartItems => _cartItems;
