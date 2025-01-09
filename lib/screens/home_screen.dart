@@ -27,35 +27,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Product> products = [
     Product(
+        id: '',
         name: 'Espresso',
         price: 2.99,
         imageUrl: 'assets/images/express.jpeg',
-        isPromo: true),
+        isPromo: true,
+        description: 'Strong and bold espresso',
+        categoryId: '0'),
     Product(
+        id: '',
         name: 'Cappuccino',
         price: 3.49,
         imageUrl: 'assets/images/cappucino.jpeg',
-        isPromo: false),
+        isPromo: false,
+        description: 'Creamy cappuccino with frothy milk',
+        categoryId: '0'),
     Product(
+        id: '',
         name: 'Latte',
         price: 3.99,
         imageUrl: 'assets/images/latte.jpeg',
-        isPromo: true),
+        isPromo: true,
+        description: 'Smooth latte with steamed milk',
+        categoryId: '0'),
     Product(
+        id: '',
         name: 'Mocha',
         price: 4.29,
         imageUrl: 'assets/images/latte.webp',
-        isPromo: false),
+        isPromo: false,
+        description: 'Chocolate flavored mocha',
+        categoryId: '0'),
     Product(
+        id: '',
         name: 'Macchiato',
         price: 3.79,
         imageUrl: 'assets/images/macchiato.jpg',
-        isPromo: true),
+        isPromo: true,
+        description: 'Espresso with a dash of milk',
+        categoryId: '0'),
     Product(
+        id: '',
         name: 'Americano',
         price: 2.89,
         imageUrl: 'assets/images/americano.jpeg',
-        isPromo: false),
+        isPromo: false,
+        description: 'Espresso diluted with hot water',
+        categoryId: '0'),
   ];
 
   List<Product> getFilteredProducts(String filter) {

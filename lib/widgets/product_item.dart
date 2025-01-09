@@ -29,7 +29,6 @@ class Item extends StatelessWidget {
                 onAddToCart: (String, double, int) {
                   product.name;
                   product.price;
-                  product.quantity;
                 },
               ),
             ),

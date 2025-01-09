@@ -40,36 +40,54 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       price: 2.99,
       imageUrl: 'assets/images/express.jpeg',
       isPromo: true,
+      description: 'Strong and bold espresso',
+      categoryId: '0',
+      id: '',
     ),
     Product(
       name: 'Cappuccino',
       price: 3.49,
       imageUrl: 'assets/images/cappucino.jpeg',
       isPromo: false,
+      description: 'Creamy cappuccino with a rich flavor',
+      categoryId: '0',
+      id: '',
     ),
     Product(
+      id: '',
       name: 'Latte',
       price: 3.99,
       imageUrl: 'assets/images/latte.jpeg',
       isPromo: true,
+      description: 'Smooth and milky latte',
+      categoryId: '0',
     ),
     Product(
+      id: '',
       name: 'Mocha',
       price: 4.29,
       imageUrl: 'assets/images/latte.webp',
       isPromo: false,
+      description: 'Chocolate flavored mocha',
+      categoryId: '0',
     ),
     Product(
+      id: '',
       name: 'Macchiato',
       price: 3.79,
       imageUrl: 'assets/images/macchiato.jpg',
       isPromo: true,
+      description: 'Rich macchiato with a hint of caramel',
+      categoryId: '0',
     ),
     Product(
+      id: '',
       name: 'Americano',
       price: 2.89,
       imageUrl: 'assets/images/americano.jpeg',
       isPromo: false,
+      description: 'Classic americano with a smooth taste',
+      categoryId: '0',
     ),
   ];
 
@@ -319,7 +337,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
-                                product.imageUrl!,
+                                product.imageUrl,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                               ),
@@ -329,7 +347,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              product.name!,
+                              product.name,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -341,7 +359,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
-                              '${product.price!.toStringAsFixed(2)}DT',
+                              '${product.price.toStringAsFixed(2)}DT',
                               style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey,
@@ -354,8 +372,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                 left: 8.0, right: 8.0, bottom: 8.0),
                             child: ElevatedButton(
                               onPressed: () => _addToCart(
-                                product.name!,
-                                product.price!,
+                                product.name,
+                                product.price,
                                 1,
                               ),
                               child: const Text('Add to Cart'),
