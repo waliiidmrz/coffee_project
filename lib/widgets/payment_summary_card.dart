@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PaymentSummaryCard extends StatelessWidget {
+  final double totalAmount;
+
+  PaymentSummaryCard({required this.totalAmount}); // Add this constructor
+
   @override
   Widget build(BuildContext context) {
     return Container(

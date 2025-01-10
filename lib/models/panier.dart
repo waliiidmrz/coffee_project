@@ -29,7 +29,7 @@ class Panier {
 
 class PanierItem {
   final Product product;
-  final int quantity;
+  late final int quantity;
 
   PanierItem({
     required this.product,

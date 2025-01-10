@@ -36,7 +36,9 @@ class NewOrderScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            PaymentSummaryCard(),
+            PaymentSummaryCard(
+              totalAmount: 100,
+            ),
             const SizedBox(height: 20),
             const Text(
               "Select Payment Method",

@@ -113,7 +113,9 @@ class _OrderScreenState extends State<OrderScreen> {
               const SizedBox(height: 20),
 
               // Payment Summary
-              PaymentSummaryCard(),
+              PaymentSummaryCard(
+                totalAmount: 100,
+              ),
               const SizedBox(height: 20),
 
               // Payment Options

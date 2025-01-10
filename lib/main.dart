@@ -1,6 +1,7 @@
 import 'package:BISOU/providers/provider.dart';
 import 'package:BISOU/providers/providercart.dart';
 import 'package:BISOU/screens/Admin/admin_dashboard_screen.dart';
+import 'package:BISOU/screens/checkout_screen.dart';
 import 'package:BISOU/screens/forgot_password.dart';
 import 'package:BISOU/screens/main_screen.dart';
 import 'package:BISOU/screens/reset_password.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           '/splash': (context) => const SplashScreen(),
           '/start': (context) => const StartScreen(),
           '/login': (context) => LoginScreen(),
+          '/checkout': (context) => const CheckoutScreen(),
           '/signup': (context) => SignUpScreen(),
           '/home': (context) => MainScreen(),
           '/adminDashboard': (context) => const AdminDashboardScreen(),
