@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
-import 'package:BISOU/widgets/welcom_back.dart';
-import 'package:flutter/material.dart';
-=======
 import 'package:flutter/material.dart';
 import 'package:BISOU/widgets/welcome_back.dart';
->>>>>>> Stashed changes
 import 'package:BISOU/data/mockuser.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen>
   bool _obscurePassword = true;
   String? _emailError;
   String? _loginError;
-  String? _passwordError;
 
   late final AnimationController _fieldsController;
   late final AnimationController _fadeController;
@@ -36,10 +30,10 @@ class _LoginScreenState extends State<LoginScreen>
   late final Animation<double> _scaleUpAnimation;
   late final Animation<double> _rotateAnimation;
 
-  bool showInstructionText = false;
-
-  late final AnimationController _instructionTextController;
-  late final Animation<double> _instructionTextFadeAnimation;
+  late final AnimationController _newAccountController;
+  late final Animation<double> _newAccountAnimation;
+  late final AnimationController _forgotPasswordController;
+  late final Animation<double> _forgotPasswordAnimation;
 
   @override
   void initState() {
@@ -47,32 +41,13 @@ class _LoginScreenState extends State<LoginScreen>
 
     // Text Fields Animation
     _fieldsController = AnimationController(
-      duration: const Duration(milliseconds: 5000),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
-    // Instruction Text Animation
-    _instructionTextController = AnimationController(
-      duration: const Duration(milliseconds: 800),
-      vsync: this,
-    );
-    _instructionTextFadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _instructionTextController, curve: Curves.easeIn),
-    );
-
-    // Add Status Listener for _fieldsController
-    _fieldsController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        setState(() {
-          showInstructionText = true;
-        });
-        _instructionTextController.forward();
-      }
-    });
 
     // Logo Animation Controller
     _logoController = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
 
@@ -93,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen>
 
     // Start Logo Animation Once
     _logoController.forward();
+
     // Fade Animation for Text Fields
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 1000),
@@ -116,6 +92,25 @@ class _LoginScreenState extends State<LoginScreen>
     _buttonScaleAnimation = Tween<double>(begin: 0.8, end: 1.1).animate(
       CurvedAnimation(parent: _loginButtonController, curve: Curves.easeInOut),
     );
+
+    // New Account Text Animation
+    _newAccountController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    _newAccountAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _newAccountController, curve: Curves.easeInOut),
+    );
+    _newAccountController.forward();
+
+    // Forgot Password Text Animation
+    _forgotPasswordController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _forgotPasswordAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _forgotPasswordController, curve: Curves.easeIn),
+    );
   }
 
   @override
@@ -124,20 +119,20 @@ class _LoginScreenState extends State<LoginScreen>
     _fadeController.dispose();
     _loginButtonController.dispose();
     _logoController.dispose();
-    _instructionTextController.dispose();
+    _newAccountController.dispose();
+    _forgotPasswordController.dispose();
     super.dispose();
   }
 
   void _toggleFieldsOrLogin() {
     if (!showFields) {
-      // Show the fields with animation
       setState(() {
         showFields = true;
       });
       _fieldsController.forward();
       _fadeController.forward();
+      _forgotPasswordController.forward();
     } else {
-      // Validate inputs and login
       _handleLogin();
     }
   }
@@ -146,10 +141,8 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       if (MockUser.authenticate(
           emailController.text, passwordController.text)) {
-        // Navigate to Home Screen if authentication is successful
         Navigator.pushNamed(context, '/home');
       } else {
-        // Show an error message if authentication fails
         _loginError = "Invalid email or password";
       }
     });
@@ -158,291 +151,338 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Prevent layout breaking
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              // Background Image
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/bg1.jpg',
-                  fit: BoxFit.cover,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/bg1.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.white.withOpacity(0.5), Colors.transparent],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color.fromARGB(255, 255, 255, 255)
-                            .withOpacity(0.5),
-                        const Color.fromARGB(0, 253, 253, 253)
+            ),
+          ),
+
+          // Animated Logo and Welcome Text
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+            top: showFields ? 50 : MediaQuery.of(context).size.height / 4,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                AnimatedBuilder(
+                  animation: _logoController,
+                  builder: (context, child) {
+                    return Opacity(
+                      opacity: _fadeInAnimation.value,
+                      child: Transform.scale(
+                        scale: _scaleUpAnimation.value,
+                        child: Transform.rotate(
+                          angle: _rotateAnimation.value,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(0.8),
+                                  blurRadius: 20,
+                                  spreadRadius: 10,
+                                ),
+                              ],
+                            ),
+                            child: Image.asset(
+                              'assets/images/bisou_logo.png',
+                              width: 150,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                WelcomeBackText(),
+              ],
+            ),
+          ),
+          // Login Button
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 1500),
+            curve: Curves.easeInOut,
+            bottom: showFields ? 210 : MediaQuery.of(context).size.height / 3,
+            left: MediaQuery.of(context).size.width / 4,
+            right: MediaQuery.of(context).size.width / 4,
+            child: GestureDetector(
+              onTap: _toggleFieldsOrLogin,
+              child: MouseRegion(
+                onEnter: (_) => _loginButtonController.forward(),
+                onExit: (_) => _loginButtonController.reverse(),
+                child: ScaleTransition(
+                  scale: _buttonScaleAnimation,
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 300, minWidth: 150),
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFE53935), Color(0xFFD81B60)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: Offset(0, 4),
+                        ),
                       ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                    ),
+                    child: Center(
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Naturally',
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-              // Animated Logo and Welcome Text
-              AnimatedPositioned(
-                duration: const Duration(seconds: 3),
-                curve: Curves.easeInOut,
-                top: showFields ? 50 : MediaQuery.of(context).size.height / 4,
-                left: 0,
-                right: 0,
-                child: Column(
-                  children: [
-                    AnimatedBuilder(
-                      animation: _logoController,
-                      builder: (context, child) {
-                        return Opacity(
-                          opacity: _fadeInAnimation.value,
-                          child: Transform.scale(
-                            scale: _scaleUpAnimation.value,
-                            child: Transform.rotate(
-                              angle: _rotateAnimation.value,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.white.withOpacity(0.8),
-                                      blurRadius: 20,
-                                      spreadRadius: 10,
-                                    ),
-                                  ],
-                                ),
-                                child: Image.asset(
-                                  'assets/images/bisou_logo.png',
-                                  width: 150,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    // Welcome Text
-                    WelcomeBackText(),
-                    // Instruction Text (Appears After Animation)
-                    if (showInstructionText)
-                      FadeTransition(
-                        opacity: _instructionTextFadeAnimation,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Text(
-                            'Please fill the forms below',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Color.fromARGB(255, 119, 113, 113),
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              // Login Button
-              AnimatedPositioned(
-                duration: const Duration(seconds: 3),
-                curve: Curves.easeInOut,
-                bottom:
-                    showFields ? 210 : MediaQuery.of(context).size.height / 3,
-                left: MediaQuery.of(context).size.width / 4,
-                right: MediaQuery.of(context).size.width / 4,
+            ),
+          ),
+          // Forgot Password Text
+          if (showFields)
+            Positioned(
+              bottom: 185,
+              left: 40,
+              child: FadeTransition(
+                opacity: _forgotPasswordAnimation,
                 child: GestureDetector(
-                  onTap: _toggleFieldsOrLogin,
-                  child: MouseRegion(
-                    onEnter: (_) => _loginButtonController.forward(),
-                    onExit: (_) => _loginButtonController.reverse(),
-                    child: ScaleTransition(
-                      scale: _buttonScaleAnimation,
-                      child: Container(
-                        constraints:
-                            const BoxConstraints(maxWidth: 300, minWidth: 150),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFE53935), Color(0xFFD81B60)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/forgot_password');
+                  },
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => LinearGradient(
+                      colors: [
+                        Colors.blue,
+                        const Color.fromARGB(255, 252, 251, 252)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ).createShader(bounds),
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        fontSize: 14,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 4,
+                            offset: Offset(2, 2),
                           ),
-                          borderRadius: BorderRadius.circular(25),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 10,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: const Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Naturally',
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // Text Fields (Appear in the Middle)
-              if (showFields)
-                Align(
-                  alignment: Alignment.center,
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: ScaleTransition(
-                      scale: _sizeAnimation,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: TextField(
-                              controller: emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              focusNode: emailFocusNode,
-                              onChanged: (value) {
-                                setState(() {
-                                  if (RegExp(
-                                          r'^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$')
-                                      .hasMatch(value)) {
-                                    _emailError =
-                                        null; // Clear error if email format is valid
-                                  } else {
-                                    _emailError =
-                                        "Invalid email format"; // Set error if invalid
-                                  }
-                                });
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: const TextStyle(
-                                  color: Color(0xFF0E3C3D),
-                                  fontFamily: 'Arial_Regular',
-                                ),
-                                filled: true,
-                                prefixIcon: const Icon(
-                                  Icons.email_outlined,
-                                  color: Color(0xFFC52127),
-                                ),
-                                errorText: _emailError,
-                                fillColor: emailFocusNode.hasFocus
-                                    ? Colors.white.withOpacity(0.5)
-                                    : Colors.grey.withOpacity(0.1),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFC52127),
-                                    width: 2,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30),
-                            child: TextField(
-                              controller: passwordController,
-                              obscureText: _obscurePassword,
-                              focusNode: passwordFocusNode,
-                              onChanged: (value) {
-                                setState(() {
-                                  _loginError =
-                                      null; // Clear login error on text change
-                                });
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                labelStyle: const TextStyle(
-                                  color: Color(0xFF0E3C3D),
-                                  fontFamily: 'Arial_Regular',
-                                ),
-                                prefixIcon: const Icon(
-                                  Icons.lock_outline,
-                                  color: Color(0xFFC52127),
-                                ),
-                                suffixIcon: passwordFocusNode.hasFocus &&
-                                        passwordController.text.isNotEmpty
-                                    ? IconButton(
-                                        icon: Icon(
-                                          _obscurePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          color: const Color(0xFFC52127),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscurePassword =
-                                                !_obscurePassword; // Toggle password visibility
-                                          });
-                                        },
-                                      )
-                                    : null, // Show the icon only if the field has focus and contains text
-                                filled: true,
-                                fillColor: passwordFocusNode.hasFocus
-                                    ? Colors.white.withOpacity(0.5)
-                                    : Colors.grey.withOpacity(0.1),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide.none,
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: const BorderSide(
-                                    color: Color(0xFFC52127),
-                                    width: 2,
-                                  ),
-                                ),
-                                contentPadding: const EdgeInsets.all(16),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          // Login Error Message
-                          if (_loginError != null)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 50),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  _loginError!,
-                                  style: const TextStyle(
-                                    color: Color.fromARGB(255, 175, 43, 34),
-                                    fontSize: 13,
-                                    fontFamily: 'Arial_Regular',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          const SizedBox(height: 33),
                         ],
                       ),
                     ),
                   ),
                 ),
-            ],
-          ),
-        ),
+              ),
+            ),
+          if (showFields)
+            // Create Account Text
+            Positioned(
+              bottom: 145,
+              left: 40,
+              child: FadeTransition(
+                opacity: _newAccountAnimation,
+                child: GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, '/signup'),
+                  child: Text(
+                    'Don' 't have an account ? Signup . ',
+                    style: TextStyle(
+                      fontSize: 14,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 4,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          // Text Fields
+          if (showFields)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Align(
+                alignment: Alignment.center,
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: ScaleTransition(
+                    scale: _sizeAnimation,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: TextField(
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            focusNode: emailFocusNode,
+                            onTap: () {
+                              setState(() {}); // Trigger rebuild on tap
+                            },
+                            /*onChanged: (value) {
+                              setState(() {
+                                if (RegExp(
+                                        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\$')
+                                    .hasMatch(value)) {
+                                  _emailError = null;
+                                } else {
+                                  _emailError = "Invalid email format";
+                                }
+                              });
+                            },*/
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              labelStyle: TextStyle(
+                                color: emailFocusNode.hasFocus
+                                    ? Color(0xFFC52127)
+                                    : Color(0xFF0E3C3D),
+                                fontFamily: 'Arial_Regular',
+                              ),
+                              prefixIcon: Icon(
+                                Icons.email_outlined,
+                                color: emailFocusNode.hasFocus
+                                    ? Color(0xFFC52127)
+                                    : Colors.grey,
+                              ),
+                              errorText: _emailError,
+                              filled: true,
+                              fillColor: emailFocusNode.hasFocus
+                                  ? Colors.white.withOpacity(0.5)
+                                  : Colors.grey.withOpacity(0.1),
+                              border: emailFocusNode.hasFocus
+                                  ? OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFFC52127),
+                                        width: 2,
+                                      ),
+                                    )
+                                  : OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide.none,
+                                    ),
+                              contentPadding: const EdgeInsets.all(16),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: TextField(
+                            controller: passwordController,
+                            obscureText: _obscurePassword,
+                            focusNode: passwordFocusNode,
+                            onTap: () {
+                              setState(() {}); // Trigger rebuild on tap
+                            },
+                            onChanged: (value) {
+                              setState(() {
+                                _loginError = null;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              labelStyle: TextStyle(
+                                color: passwordFocusNode.hasFocus
+                                    ? Color(0xFFC52127)
+                                    : Color(0xFF0E3C3D),
+                                fontFamily: 'Arial_Regular',
+                              ),
+                              prefixIcon: Icon(
+                                Icons.lock_outline,
+                                color: passwordFocusNode.hasFocus
+                                    ? Color(0xFFC52127)
+                                    : Colors.grey,
+                              ),
+                              suffixIcon: passwordFocusNode.hasFocus &&
+                                      passwordController.text.isNotEmpty
+                                  ? IconButton(
+                                      icon: Icon(
+                                        _obscurePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: Color(0xFFC52127),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _obscurePassword = !_obscurePassword;
+                                        });
+                                      },
+                                    )
+                                  : null,
+                              filled: true,
+                              fillColor: passwordFocusNode.hasFocus
+                                  ? Colors.white.withOpacity(0.5)
+                                  : Colors.grey.withOpacity(0.1),
+                              border: passwordFocusNode.hasFocus
+                                  ? OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide(
+                                        color: Color(0xFFC52127),
+                                        width: 2,
+                                      ),
+                                    )
+                                  : OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      borderSide: BorderSide.none,
+                                    ),
+                              contentPadding: const EdgeInsets.all(16),
+                            ),
+                          ),
+                        ),
+                        if (_loginError != null)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 50),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                _loginError!,
+                                style: const TextStyle(
+                                  color: Color.fromARGB(255, 175, 43, 34),
+                                  fontSize: 13,
+                                  fontFamily: 'Arial_Regular',
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

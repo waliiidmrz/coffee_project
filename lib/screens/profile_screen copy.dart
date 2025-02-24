@@ -2,7 +2,6 @@ import 'package:BISOU/screens/admin_menu_screen.dart';
 import 'package:BISOU/screens/admin_order_management_screen.dart';
 import 'package:BISOU/screens/admin_user_list_screen.dart';
 import 'package:BISOU/screens/edit_profile_screen.dart';
-import 'package:BISOU/screens/rewards_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -45,7 +44,7 @@ class ProfileAdminScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              Navigator.pushNamed(context, '/login'); // Logout and go to login
+              Navigator.pushNamed(context, '/home');
             },
           ),
         ],
